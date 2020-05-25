@@ -15,11 +15,11 @@ class Pipeline:
             lang: Optional[str] = None
 
             @staticmethod
-            def id():
-                return model.id()
+            def eid():
+                return model.eid()
 
         new_model = NewModel(**parameters)
-        self.pipeline[new_model.id()] = new_model
+        self.pipeline[new_model.eid()] = new_model
         return self
 
     def call(self):
