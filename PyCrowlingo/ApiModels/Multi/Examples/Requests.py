@@ -12,8 +12,8 @@ class Pipeline(BaseModel):
         schema_extra = {
             "example": {"[POST] /v1/entities/extract": {"text": _text},
                         "[POST] /v1/languages/detect": {}},
-            "_python": ["from PyNeutralNews.ApiModels import Entities, Languages",
-                        "from PyNeutralNews import Pipeline",
+            "_python": ["from PyCrowlingo.ApiModels import Entities, Languages",
+                        "from PyCrowlingo import Pipeline",
                         f"text = \"{_text}\"",
                         "Pipeline(client).add(Entities.Extract, text=text).add(Languages.Detect).call()"]
         }
