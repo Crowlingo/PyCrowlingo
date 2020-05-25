@@ -21,7 +21,7 @@ class BasicModel(BaseModel):
         pass
 
     @classmethod
-    def id(cls):
+    def eid(cls):
         return f"[{cls._method}] {cls.endpoint()}"
 
     @classmethod

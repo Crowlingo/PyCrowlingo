@@ -1,3 +1,3 @@
 from .Client import Client
 from .Multi import Pipeline
-from . import ApiModels
+from . import ApiModels, Rasa
