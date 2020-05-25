@@ -4,7 +4,7 @@ from .ApiModels import Multi as Models
 
 
 class Pipeline:
-    def __init__(self, client, **commons):
+    def __init__(self, client=None, **commons):
         self._client = client
         self.pipeline = {}
         self.commons = commons
@@ -39,7 +39,10 @@ class Bulk:
     def add(self, pipeline):
         self.pipelines.append(Models.Pipeline.fill(**pipeline.__dict__))
 
-    def call(self):
+    def lazy_call(self):
         for i in range(0, len(self.pipelines), self._batch_size):
             for res in Models.Bulk.fill(pipelines=self.pipelines[i: i + self._batch_size]).call(self._client).responses:
                 yield res
+
+    def call(self):
+        return list(self.lazy_call())
