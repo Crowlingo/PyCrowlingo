@@ -1,6 +1,7 @@
 # PyCrowlingo: Python SDK for Crowlingo APIs
 
-Here is the official Python client for [Crowlingo](https://crowlingo.com). It will allows you to access all its NLP and NLU services regardless of the language.  
+Here is the official Python client for [Crowlingo](https://crowlingo.com). Access to all NLP and NLU services that analyze texts regardless of the language.
+  
 
 
 Installation
@@ -61,7 +62,7 @@ print(res.classes[0].class_id)
 
 ### Pipeline
 
-If you need to analyse a text through different services, it can be cumbersome to call the API for every step of processing.
+If you need to analyze texts through different services, it can be cumbersome to call the API for every step of processing.
 Gain some speed and productivity by using a Pipeline. It allows you to create a workflow of processing for your data.
 To do so, you have to use the ApiModels instead of the client function.
 
@@ -86,8 +87,9 @@ print(res.responses[Entities.Extract.eid()])
 
 ### Bulk Request
 
-Most of the time, you will need to apply this process on a dataset. Again, you will gain speed by using bulk request. It allows to perform many operations in the same time.
-Here is an example on how to it:
+Most of the time, you will need to apply this process on a dataset. Again, you will gain speed by using bulk request. It allows to perform many operations in the same time. 
+Here is an example on how to do it:
+
 ```python
 from PyCrowlingo import Bulk, Pipeline
 from PyCrowlingo.ApiModels import *
@@ -109,28 +111,29 @@ res = bulk.call()
 assert len(res.responses) == 300 # True
 ```
 
-Using a bulk will automatically request the API using batch (you can controle its size using `batch_size` argument). So that, you don't have to worry anymore with the management of the query size. 
+Using a bulk will automatically make API requests using batch (you can controle its size using `batch_size` argument). So that, you don't have to worry about the management of the query size.
+
 
 ## Rasa
 
-Crowlingo services can be very useful to create a polyglot chatbot using an existing one. The easiest way to do it is through the popular [Rasa](https://github.com/RasaHQ/rasa).
-PyCrowlingo integrate packages to use directly on Rasa. 
+Crowlingo services can be very useful to create a polyglot chatbot using an existing one. The easiest way is to do it through [Rasa](https://github.com/RasaHQ/rasa).
+PyCrowlingo provide packages to easily integrate on Rasa.
 
 ### Installation
 
-For installing rasa dependencies, just use the following command:
+To install rasa dependencies, simply enter the following command:
 
 ```bash
 pip install PyCrowlingo[rasa]
 ```
 
-Follow the [Rasa quick start guide](https://rasa.com/docs/rasa/user-guide/building-assistants/) for building a chatbot.
+Follow the [Rasa quick start guide](https://rasa.com/docs/rasa/user-guide/building-assistants/) to build your chatbot.
 
 ### Usage
 
 Open the file config.yml and modify the pipeline to integrate Crowlingo NLU components.
 
-Here is an example with the chatbot created with the Rasa quick start guide:
+Here is an example of a chatbot created with Rasa quick start guide::
 
 ```yaml
 language: en
@@ -147,8 +150,7 @@ Train the model:
 rasa train
 ```
 
-And watch the result:
-
+And now, enjoy your multilingual chatbot:
 ```bash
 rasa shell
 >>> Your input -> Bonjour !
