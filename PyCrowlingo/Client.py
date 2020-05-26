@@ -45,7 +45,7 @@ class Client:
         self._token = token
 
     def call(self, endpoint, method, auth=None, params=None, json=None, retry=0):
-        headers = {'api_key': self.get_token()} if not auth else None
+        headers = {'x-api-key': self.get_token()} if not auth else None
         url = f'{self._url}{endpoint}'
         res = requests.request(method=method, url=url, auth=auth,
                                headers=headers, params=params, json=json)
