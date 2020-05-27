@@ -117,7 +117,7 @@ Using a bulk will automatically make API requests using batch (you can controle 
 ## Rasa
 
 Crowlingo services can be very useful to create a polyglot chatbot using an existing one. The easiest way is to do it through [Rasa](https://github.com/RasaHQ/rasa).
-PyCrowlingo provide packages to easily integrate on Rasa.
+PyCrowlingo provides packages to easily integrate on Rasa.
 
 ### Installation
 
