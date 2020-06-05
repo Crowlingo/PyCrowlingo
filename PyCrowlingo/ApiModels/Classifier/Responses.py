@@ -24,5 +24,13 @@ class TrainModel(Examples.TrainModel, ModelId):
     pass
 
 
+class DeployModel(Examples.DeployModel, ModelId):
+    pass
+
+
+class ClearModel(Examples.ClearModel, ModelId):
+    pass
+
+
 class DeleteModel(Examples.DeleteModel, ModelId):
     pass

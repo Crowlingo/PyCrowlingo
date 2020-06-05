@@ -1,6 +1,7 @@
 from . import Responses
 from .Examples import Requests as Examples
-from ..Attributes import Precision, Split, ModelId, Properties, Document, ConceptId, LabelId, Id
+from ..Attributes import Precision, Split, ModelId, Properties, Document, ConceptId, LabelId, Id, OptionalModelId, \
+    ProdVersion
 from ..Basic import BasicModel
 
 
@@ -13,12 +14,28 @@ class Base(BasicModel):
 class Extract(Examples.Extract, Base, Document, Properties):
     _price = 1
 
-    class Query(Precision, Split, ModelId):
+    class Query(Precision, Split, OptionalModelId, ProdVersion):
         pass
 
 
 class TrainModel(Examples.TrainModel, Base):
     _endpoint = "{model_id}/train"
+    _price = 1
+
+    class Query(ModelId):
+        pass
+
+
+class DeployModel(Examples.DeployModel, Base):
+    _endpoint = "{model_id}/train"
+    _price = 1
+
+    class Query(ModelId):
+        pass
+
+
+class ClearModel(Examples.ClearModel, Base):
+    _endpoint = "{model_id}/clear"
     _price = 1
 
     class Query(ModelId):

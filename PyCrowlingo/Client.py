@@ -25,9 +25,8 @@ class Client:
         self._token = token
         self._retry = retry
         self._time_retry = time_retry
-        # self._decode_token()
+        self._plan = None
         self.get_token(username, password)
-        # self._decode_token()
 
     def get_token(self, username=None, password=None):
         if self._token is None and username is None and password is None:
@@ -40,6 +39,9 @@ class Client:
         elif self._token is None:
             self.user.login(username, password)
         return self._token
+
+    def get_plan(self):
+        return self._plan
 
     def set_token(self, token):
         self._token = token

@@ -1,1 +1,2 @@
-from .Requests import Classify, CreateSentence, TrainModel, CreateModel, DeleteModel, DeleteSentence
+from .Requests import Classify, CreateSentence, TrainModel, DeployModel, ClearModel, CreateModel, \
+    DeleteModel, DeleteSentence

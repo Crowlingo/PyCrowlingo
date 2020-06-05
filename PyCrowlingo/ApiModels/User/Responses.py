@@ -1,17 +1,32 @@
+from typing import List
+
 from .Examples import Responses as Examples
+from ..Attributes import ModelInfo
 
 
 class Usage(Examples.Usage):
-    cur_rate: int
-    rate_limit: int
-    month_requests: int
-    monthly_limit: int
+    cur_minute: int
+    cur_period: int
+    minute_limit: int
+    period_limit: int
+    models_limit: int
+    minute_reset: str
+    period_reset: str
 
 
 class Login(Examples.Login):
     access_token: str
-    admin: bool
+    plan: str
 
 
 class RefreshToken(Examples.RefreshToken):
     access_token: str
+
+
+class Info(Examples.Usage):
+    email: str
+    plan: str
+
+
+class ModelsInfo(Examples.Usage):
+    models: List[ModelInfo]

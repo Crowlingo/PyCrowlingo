@@ -1,7 +1,9 @@
 from typing import List, Optional, Union, Dict, Any
 
-from pydantic import BaseModel, AnyUrl, EmailStr, Field
+from pydantic import BaseModel, AnyUrl, EmailStr, Field, constr
 from pydantic.schema import datetime
+
+PATH_TYPE = constr(regex=r"[a-zA-Z0-9_\-]*")
 
 
 class Id(BaseModel):
@@ -267,8 +269,16 @@ class TemporaryTokenExpiration(BaseModel):
     tmp_token_expiration: datetime
 
 
+class OptionalModelId(BaseModel):
+    model_id: Optional[PATH_TYPE] = None
+
+
 class ModelId(BaseModel):
-    model_id: Optional[str] = None
+    model_id: PATH_TYPE
+
+
+class ProdVersion(BaseModel):
+    prod_version: bool = False
 
 
 class Variations(BaseModel):
@@ -357,3 +367,11 @@ class Visualization(BaseModel):
 class CommonsPipeline(BaseModel):
     pipeline: Dict[str, Any]
     commons: Dict[str, Any] = {}
+
+
+class ModelInfo(BaseModel):
+    name: str
+    category: str
+    trained: bool
+    owner: str
+    deployed: bool

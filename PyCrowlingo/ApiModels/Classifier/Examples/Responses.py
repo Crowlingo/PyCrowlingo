@@ -40,6 +40,24 @@ class TrainModel(BaseModel):
         }
 
 
+class DeployModel(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "model_id": "AskUbuntu"
+            }
+        }
+
+
+class ClearModel(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "model_id": "AskUbuntu"
+            }
+        }
+
+
 class DeleteModel(BaseModel):
     class Config:
         schema_extra = {

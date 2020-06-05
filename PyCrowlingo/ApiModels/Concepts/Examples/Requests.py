@@ -90,3 +90,21 @@ class TrainModel(BaseModel):
             "_python": [f"model_id = \"{_model_id}\"",
                         "client.concepts.train_model(model_id)"]
         }
+
+
+class DeployModel(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.concepts.deploy_model(model_id)"]
+        }
+
+
+class ClearModel(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.concepts.clear_model(model_id)"]
+        }

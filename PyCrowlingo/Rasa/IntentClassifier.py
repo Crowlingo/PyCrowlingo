@@ -52,10 +52,12 @@ class IntentClassifier(classifier.IntentClassifier):
 
         """
         try:
-            self.client.classifier.delete_model(self.model_id)
-        except HTTPError:
-            pass
-        self.client.classifier.create_model(self.model_id)
+            self.client.classifier.clear_model(self.model_id)
+        except HTTPError as e:
+            if e.status_code == 404:
+                self.client.classifier.create_model(self.model_id)
+            else:
+                raise e
         bulk = Bulk(self.client)
         for message in training_data.training_examples:
             bulk.add(Pipeline().add(Classifier.CreateSentence, model_id=self.model_id, text=message.text,

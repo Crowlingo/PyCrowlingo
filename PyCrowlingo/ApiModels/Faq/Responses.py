@@ -14,6 +14,10 @@ class TrainModel(ModelId):
     pass
 
 
+class DeployModel(ModelId):
+    pass
+
+
 class CreateModel(ModelId):
     pass
 
@@ -33,6 +37,9 @@ class DeleteModel(ModelId):
 class DeleteQuestion(QuestionId):
     pass
 
+
+class ClearModel(ModelId):
+    pass
 
 class DeleteAnswer(AnswerId):
     pass

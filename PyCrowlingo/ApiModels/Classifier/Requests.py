@@ -1,6 +1,6 @@
 from . import Responses
 from .Examples import Requests as Examples
-from ..Attributes import ModelId, Document, ClassId, Id, SentenceId
+from ..Attributes import ModelId, Document, ClassId, Id, SentenceId, ProdVersion
 from ..Basic import BasicModel
 
 
@@ -14,7 +14,7 @@ class Classify(Examples.Classify, Base, Document):
     _endpoint = "{model_id}/classify"
     _price = 1
 
-    class Query(ModelId):
+    class Query(ModelId, ProdVersion):
         pass
 
 
@@ -36,6 +36,20 @@ class CreateModel(Examples.CreateModel, Base):
 class DeleteModel(Examples.DeleteModel, Base):
     _endpoint = "{model_id}"
     _method = "DELETE"
+
+    class Query(ModelId):
+        pass
+
+
+class DeployModel(Examples.DeployModel, Base):
+    _endpoint = "{model_id}/deploy"
+
+    class Query(ModelId):
+        pass
+
+
+class ClearModel(Examples.ClearModel, Base):
+    _endpoint = "{model_id}/clear"
 
     class Query(ModelId):
         pass

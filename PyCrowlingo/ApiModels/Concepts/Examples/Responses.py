@@ -111,3 +111,21 @@ class TrainModel(BaseModel):
                 "model_id": "my_model"
             }
         }
+
+
+class DeployModel(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "model_id": "my_model"
+            }
+        }
+
+
+class ClearModel(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "model_id": "my_model"
+            }
+        }

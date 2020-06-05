@@ -2,7 +2,7 @@ from typing import List
 
 from . import Responses
 from .Examples import Requests as Examples
-from ..Attributes import ModelId, QuestionId, AnswerId, Document, Id, Variations
+from ..Attributes import ModelId, QuestionId, AnswerId, Document, Id, Variations, ProdVersion
 from ..Basic import BasicModel
 
 
@@ -17,12 +17,28 @@ class Search(Examples.Search, Base, Document):
     _price = 1
     variations: List[str] = []  # try to pass it in query
 
-    class Query(ModelId):
+    class Query(ModelId, ProdVersion):
         pass
 
 
 class TrainModel(Base):
     _endpoint = "{model_id}/train"
+    _price = 1
+
+    class Query(ModelId):
+        pass
+
+
+class DeployModel(Base):
+    _endpoint = "{model_id}/deploy"
+    _price = 1
+
+    class Query(ModelId):
+        pass
+
+
+class ClearModel(Base):
+    _endpoint = "{model_id}/clear"
     _price = 1
 
     class Query(ModelId):

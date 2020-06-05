@@ -56,6 +56,22 @@ class TrainModel(BaseModel):
                         "client.classifier.train_model(model_id)"]
         }
 
+class DeployModel(BaseModel):
+    class Config:
+        _model_id = "AskUbuntu"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.classifier.deploy_model(model_id)"]
+        }
+
+class ClearModel(BaseModel):
+    class Config:
+        _model_id = "AskUbuntu"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.classifier.clear_model(model_id)"]
+        }
+
 
 class DeleteModel(BaseModel):
     class Config:

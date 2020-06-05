@@ -20,3 +20,12 @@ class RefreshToken(Examples.RefreshToken, Base):
 
 class Usage(Examples.Usage, Base):
     pass
+
+
+class Info(Examples.Usage, Base):
+    pass
+
+
+class ModelsInfo(Examples.Usage, Base):
+    pass
+
