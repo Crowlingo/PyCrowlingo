@@ -22,3 +22,17 @@ class RefreshToken(BaseModel):
             "_python": [f"username = \"[USERNAME]\"", f"password = \"[PASSWORD]\"",
                         "client.user.refresh_token(username, password)"]
         }
+
+
+class Info(BaseModel):
+    class Config:
+        schema_extra = {
+            "_python": ["client.user.info()"]
+        }
+
+
+class ModelsInfo(BaseModel):
+    class Config:
+        schema_extra = {
+            "_python": ["client.user.models_info()"]
+        }

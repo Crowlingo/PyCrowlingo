@@ -8,7 +8,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name='PyCrowlingo',
-    version='0.2',
+    version='0.3',
     packages=find_packages(),
     install_requires=requirements,
     long_description=long_description,
@@ -16,6 +16,7 @@ setup(
     extras_require={
         'rasa': ["rasa"]
     },
+    url='https://github.com/Crowlingo/PyCrowlingo/',
     license='copyright: Crowlingo',
     author='Jonas Bouaziz',
     description='Official Crowlingo SDK. Access to all NLP and NLU services that analyze texts regardless of the '

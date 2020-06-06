@@ -23,10 +23,10 @@ class RefreshToken(Examples.RefreshToken):
     access_token: str
 
 
-class Info(Examples.Usage):
+class Info(Examples.Info):
     email: str
     plan: str
 
 
-class ModelsInfo(Examples.Usage):
+class ModelsInfo(Examples.ModelsInfo):
     models: List[ModelInfo]

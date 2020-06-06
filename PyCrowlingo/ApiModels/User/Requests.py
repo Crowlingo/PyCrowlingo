@@ -22,10 +22,10 @@ class Usage(Examples.Usage, Base):
     pass
 
 
-class Info(Examples.Usage, Base):
+class Info(Examples.Info, Base):
     pass
 
 
-class ModelsInfo(Examples.Usage, Base):
+class ModelsInfo(Examples.ModelsInfo, Base):
     pass
 
