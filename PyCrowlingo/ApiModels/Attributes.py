@@ -1,13 +1,14 @@
+from enum import Enum
 from typing import List, Optional, Union, Dict, Any
 
 from pydantic import BaseModel, AnyUrl, EmailStr, Field, constr
 from pydantic.schema import datetime
 
-PATH_TYPE = constr(regex=r"[a-zA-Z0-9_\-]*")
+ID_TYPE = constr(regex=r"[a-zA-Z0-9_\-]*")
 
 
 class Id(BaseModel):
-    id: Optional[str] = None
+    id: Optional[ID_TYPE] = None
 
 
 class Position(BaseModel):
@@ -84,7 +85,7 @@ class Texts(BaseModel):
 
 
 class Lang(BaseModel):
-    lang: Optional[str] = Field(None, description="Language of the content", example="fr")
+    lang: Optional[ID_TYPE] = Field(None, description="Language of the content", example="fr")
 
 
 class Document(Lang):
@@ -92,7 +93,7 @@ class Document(Lang):
 
 
 class Langs(BaseModel):
-    langs: List[str]
+    langs: List[ID_TYPE]
 
 
 class Url(BaseModel):
@@ -210,11 +211,11 @@ class Summary(BaseModel):
 
 
 class CorpusId(BaseModel):
-    corpus_id: str
+    corpus_id: ID_TYPE
 
 
 class OptionalCorpusId(BaseModel):
-    corpus_id: str = None
+    corpus_id: ID_TYPE = None
 
 
 class Inserted(BaseModel):
@@ -240,19 +241,6 @@ class Article(Id, Url, Cursor):
     publish_date: str
 
 
-class CustomLabel(Text, Lang):
-    dest: str
-
-
-class Annotation(Position):
-    label: str
-
-
-class TrainingDocument(Lang):
-    text: str
-    annotations: List[Annotation]
-
-
 class Email(BaseModel):
     email: EmailStr
 
@@ -270,11 +258,11 @@ class TemporaryTokenExpiration(BaseModel):
 
 
 class OptionalModelId(BaseModel):
-    model_id: Optional[PATH_TYPE] = None
+    model_id: Optional[ID_TYPE] = None
 
 
 class ModelId(BaseModel):
-    model_id: PATH_TYPE
+    model_id: ID_TYPE
 
 
 class ProdVersion(BaseModel):
@@ -286,15 +274,15 @@ class Variations(BaseModel):
 
 
 class QuestionId(BaseModel):
-    question_id: Optional[str] = None
+    question_id: Optional[ID_TYPE] = None
 
 
 class AnswerId(BaseModel):
-    answer_id: Optional[str] = None
+    answer_id: Optional[ID_TYPE] = None
 
 
 class Question(Id, Variations):
-    answer_id: Optional[str] = None
+    answer_id: Optional[ID_TYPE] = None
 
 
 class Answer(Id, Variations):
@@ -302,11 +290,11 @@ class Answer(Id, Variations):
 
 
 class ConceptId(BaseModel):
-    concept_id: Optional[str] = None
+    concept_id: Optional[ID_TYPE] = None
 
 
 class LabelId(BaseModel):
-    label_id: Optional[str] = None
+    label_id: Optional[ID_TYPE] = None
 
 
 class Entity(Position):
@@ -345,11 +333,11 @@ class PhraseMatch(Match):
 
 
 class ClassId(BaseModel):
-    class_id: str
+    class_id: ID_TYPE = None
 
 
-class SentenceId(BaseModel):
-    sentence_id: str
+class DocumentId(BaseModel):
+    document_id: ID_TYPE
 
 
 class ClassDetection(ClassId):
@@ -370,8 +358,85 @@ class CommonsPipeline(BaseModel):
 
 
 class ModelInfo(BaseModel):
-    name: str
+    name: ID_TYPE
     category: str
     trained: bool
     owner: str
     deployed: bool
+
+
+class Error(BaseModel):
+    error_id: str
+    msg: str
+
+
+class ModelType(str, Enum):
+    SVM: str = "svm"
+    DEEP: str = "deep"
+
+
+class CustomConcept(Id, Properties):
+    pass
+
+
+class CustomLabel(Id, ConceptId, Document):
+    precision: float = 0.75
+
+
+class CustomDocument(Id, Document, ClassId):
+    pass
+
+
+class CustomQuestion(Variations, Id, AnswerId):
+    pass
+
+
+class CustomAnswer(Variations, Id):
+    pass
+
+
+class QuestionsId(BaseModel):
+    questions_id: List[ID_TYPE]
+
+
+class AnswersId(BaseModel):
+    answers_id: List[ID_TYPE]
+
+
+class ConceptsId(BaseModel):
+    documents_id: List[ID_TYPE]
+
+
+class LabelsId(BaseModel):
+    documents_id: List[ID_TYPE]
+
+
+class DocumentsId(BaseModel):
+    documents_id: List[ID_TYPE]
+
+
+class Pagination(BaseModel):
+    page: int = Field(1, ge=1)
+    page_size: int = Field(10, ge=1)
+    sort: str = "id"
+    ascending: bool = True
+
+
+class DocumentModel(Id, Document, ClassId):
+    pass
+
+
+class LabelModel(Document, Id, ConceptId):
+    pass
+
+
+class ConceptModel(Document, Id, Properties):
+    pass
+
+
+class QuestionModel(Document, Id, Variations, AnswerId):
+    pass
+
+
+class AnswerModel(Document, Id, Variations):
+    pass

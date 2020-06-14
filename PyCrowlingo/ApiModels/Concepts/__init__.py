@@ -1,3 +1,3 @@
 from . import Responses
-from .Requests import Extract, TrainModel, DeployModel, ClearModel, CreateModel, CreateConcept, CreateLabel, DeleteModel, \
-    DeleteConcept, DeleteLabel
+from .Requests import Extract, TrainModel, DeployModel, ClearModel, CreateModel, CreateConcepts, CreateLabels, \
+    UpdateLabel, UpdateConcept, DeleteModel, DeleteConcept, DeleteLabel, ListLabels, ListConcepts

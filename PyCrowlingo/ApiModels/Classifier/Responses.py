@@ -1,7 +1,7 @@
 from typing import List
 
 from .Examples import Responses as Examples
-from ..Attributes import ModelId, ClassDetection
+from ..Attributes import ModelId, ClassDetection, DocumentsId, DocumentId, DocumentModel
 
 
 class Classify(Examples.Classify):
@@ -12,12 +12,12 @@ class CreateModel(ModelId):
     pass
 
 
-class CreateSentence(Examples.CreateSentence):
-    sentence_id: str
+class CreateDocuments(Examples.CreateDocuments, DocumentsId):
+    pass
 
 
-class DeleteSentence(Examples.DeleteSentence):
-    sentence_id: str
+class DeleteDocument(Examples.DeleteDocument, DocumentId):
+    pass
 
 
 class TrainModel(Examples.TrainModel, ModelId):
@@ -34,3 +34,11 @@ class ClearModel(Examples.ClearModel, ModelId):
 
 class DeleteModel(Examples.DeleteModel, ModelId):
     pass
+
+
+class UpdateDocument(Examples.UpdateDocument, DocumentId):
+    pass
+
+
+class ListDocuments(Examples.ListDocuments):
+    documents: List[DocumentModel]

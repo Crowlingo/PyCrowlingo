@@ -26,31 +26,29 @@ class CreateModel(BaseModel):
         }
 
 
-class CreateConcept(BaseModel):
+class CreateConcepts(BaseModel):
     class Config:
         _model_id = "my_model"
-        _id = "Greeting"
+        _concepts = [{"id": "Greeting"}]
         schema_extra = {
             "example": {
-                "id": _id
+                "concepts": _concepts
             },
-            "_python": [f"model_id = \"{_model_id}\"", f"id = \"{_id}\"",
-                        "client.concepts.create_concept(model_id, id)"]
+            "_python": [f"model_id = \"{_model_id}\"", f"concepts = \"{_concepts}\"",
+                        "client.concepts.create_concepts(model_id, concepts)"]
         }
 
 
-class CreateLabel(BaseModel):
+class CreateLabels(BaseModel):
     class Config:
         _model_id = "my_model"
-        _text = "Bonjour"
-        _concept_id = "Greeting"
+        _labels = [{"text": "Bonjour", "concept_id": "Greeting"}]
         schema_extra = {
             "example": {
-                "text": _text,
-                "concept_id": _concept_id
+                "labels": _labels
             },
-            "_python": [f"model_id = \"{_model_id}\"", f"text = \"{_text}\"", f"concept_id = \"{_concept_id}\"",
-                        "client.concepts.create_label(model_id, text, concept_id=concept_id)"]
+            "_python": [f"model_id = \"{_model_id}\"", f"labels = \"{_labels}\"",
+                        "client.concepts.create_labels(model_id, labels)"]
         }
 
 
@@ -107,4 +105,52 @@ class ClearModel(BaseModel):
         schema_extra = {
             "_python": [f"model_id = \"{_model_id}\"",
                         "client.concepts.clear_model(model_id)"]
+        }
+
+
+class UpdateConcept(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        _properties = {"title.en": "New Concept Title"}
+        _concept_id = "Greeting"
+        schema_extra = {
+            "example": {
+                "properties": _properties
+            },
+            "_python": [f"model_id = \"{_model_id}\"", f"concept_id = \"{_concept_id}\"",
+                        f"properties = {_properties}",
+                        "client.concepts.update_concept(model_id, concept_id, properties=properties)"]
+        }
+
+
+class UpdateLabel(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        _text = "Salut"
+        _label_id = "aiJ4gtGm"
+        schema_extra = {
+            "example": {
+                "text": _label_id
+            },
+            "_python": [f"model_id = \"{_model_id}\"", f"label_id = \"{_label_id}\"",
+                        f"text = \"{_text}\"",
+                        "client.concepts.update_label(model_id, label_id, text=text)"]
+        }
+
+
+class ListConcepts(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.concepts.list_concepts(model_id)"]
+        }
+
+
+class ListLabels(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.concepts.list_labels(model_id)"]
         }

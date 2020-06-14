@@ -1,6 +1,23 @@
 import re
+from collections import defaultdict
 
 from pydantic import BaseModel
+
+from .. import Errors
+
+HEADERS = {
+    "x-cur-minute": {"description": "Counter of requests made during this minute", "schema": {"type": "string"}},
+    "x-cur-period": {"description": "Counter of requests made during this period", "schema": {"type": "string"}},
+    "x-minute-limit": {"description": "Limit number of requests in one minute", "schema": {"type": "string"}},
+    "x-period-limit": {"description": "Limit number of requests in one period", "schema": {"type": "string"}},
+    "x-minute-reset": {"description": "Seconds until the minute counter reset", "schema": {"type": "string"}},
+    "x-period-reset": {"description": "Seconds until the period counter reset", "schema": {"type": "string"}},
+    "x-query-price": {"description": "Number of requests consumed by this query", "schema": {"type": "integer"}},
+}
+
+
+NO_HEADERS_STATUS = [401, 403, 422, 500]
+BASIC_STATUS = [200, 401, 422]
 
 
 class BasicModel(BaseModel):
@@ -13,6 +30,7 @@ class BasicModel(BaseModel):
     _query = {}
     _rbm = {}
     _price = 1
+    _responses = []
 
     class Query(BaseModel):
         pass
@@ -48,10 +66,20 @@ class BasicModel(BaseModel):
         return getattr(cls._response_module, cls.__name__)
 
     @classmethod
+    def get_responses(cls):
+        res = defaultdict(dict)
+        for status in cls._responses + BASIC_STATUS:
+            if status not in NO_HEADERS_STATUS:
+                res[status]["headers"] = HEADERS
+            res[status]["model"] = Errors.CrowlingoExceptionModel
+        return res
+
+    @classmethod
     def route(cls):
         return {
             "path": cls.endpoint(),
             "response_model": cls.get_response_model(),
+            "responses": cls.get_responses(),
             "response_model_skip_defaults": True,
             "include_in_schema": cls._include_in_schema,
             "methods": [cls._method]
@@ -63,7 +91,7 @@ class BasicModel(BaseModel):
         query = {}
         path = {}
         for k, v in self._query.items():
-            if v:
+            if v is not None:
                 if f'{{{k}}}' in endpoint:
                     path[k] = v
                 else:

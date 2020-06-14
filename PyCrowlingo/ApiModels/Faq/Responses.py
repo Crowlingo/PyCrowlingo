@@ -1,7 +1,8 @@
-from typing import Optional
+from typing import Optional, List
 
 from .Examples import Responses as Examples
-from ..Attributes import Answer, Question, QuestionId, AnswerId, ModelId
+from ..Attributes import Answer, Question, QuestionId, AnswerId, ModelId, QuestionsId, AnswersId, QuestionModel, \
+    AnswerModel
 
 
 class Search(Examples.Search):
@@ -10,36 +11,53 @@ class Search(Examples.Search):
     similarity: Optional[float]
 
 
-class TrainModel(ModelId):
+class TrainModel(Examples.TrainModel, ModelId):
     pass
 
 
-class DeployModel(ModelId):
+class DeployModel(Examples.DeployModel, ModelId):
     pass
 
 
-class CreateModel(ModelId):
+class CreateModel(Examples.CreateModel, ModelId):
     pass
 
 
-class CreateQuestion(QuestionId):
+class ClearModel(Examples.ClearModel, ModelId):
     pass
 
 
-class CreateAnswer(AnswerId):
+class CreateQuestions(Examples.CreateQuestions, QuestionsId):
     pass
 
 
-class DeleteModel(ModelId):
+class CreateAnswers(Examples.CreateAnswers, AnswersId):
     pass
 
 
-class DeleteQuestion(QuestionId):
+class UpdateQuestion(Examples.UpdateQuestion, QuestionId):
     pass
 
 
-class ClearModel(ModelId):
+class UpdateAnswer(Examples.UpdateAnswer, AnswerId):
     pass
 
-class DeleteAnswer(AnswerId):
+
+class DeleteModel(Examples.DeleteModel, ModelId):
     pass
+
+
+class DeleteQuestion(Examples.DeleteQuestion, QuestionId):
+    pass
+
+
+class DeleteAnswer(Examples.DeleteAnswer, AnswerId):
+    pass
+
+
+class ListQuestions(Examples.ListQuestions):
+    questions: List[QuestionModel]
+
+
+class ListAnswers(Examples.ListAnswers):
+    answers: List[AnswerModel]

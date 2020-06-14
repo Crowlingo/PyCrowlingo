@@ -13,20 +13,20 @@ class Classify(BaseModel):
         }
 
 
-class CreateSentence(BaseModel):
+class CreateDocuments(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "sentence_id": "PQk4AQbu"
+                "documents_id": ["PQk4AQbu"]
             }
         }
 
 
-class DeleteSentence(BaseModel):
+class DeleteDocument(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "sentence_id": "PQk4AQbu"
+                "document_id": "PQk4AQbu"
             }
         }
 
@@ -63,5 +63,28 @@ class DeleteModel(BaseModel):
         schema_extra = {
             "example": {
                 "model_id": "AskUbuntu"
+            }
+        }
+
+
+class UpdateDocument(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "document_id": "PQk4AQbu"
+            }
+        }
+
+
+class ListDocuments(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "documents": [{"id": "PQk4AQbu",
+                               "text": "How to setup wireless printing from a printer connected via usb on Ubuntu "
+                                       "Server 12.10?",
+                               "lang": "en",
+                               "class_id": "Setup Printer"
+                               }]
             }
         }

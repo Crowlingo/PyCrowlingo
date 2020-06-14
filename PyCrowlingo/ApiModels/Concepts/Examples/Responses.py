@@ -58,20 +58,20 @@ class CreateModel(BaseModel):
         }
 
 
-class CreateConcept(BaseModel):
+class CreateConcepts(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "concept_id": "Greeting"
+                "concepts_id": ["Greeting"]
             }
         }
 
 
-class CreateLabel(BaseModel):
+class CreateLabels(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "label_id": "aiJ4gtGm"
+                "labels_id": ["aiJ4gtGm"]
             }
         }
 
@@ -127,5 +127,41 @@ class ClearModel(BaseModel):
         schema_extra = {
             "example": {
                 "model_id": "my_model"
+            }
+        }
+
+
+class UpdateConcept(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "concept_id": "Greeting"
+            }
+        }
+
+
+class UpdateLabel(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "label_id": "aiJ4gtGm"
+            }
+        }
+
+
+class ListLabels(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "labels": [{"text": "Bonjour", "lang": "fr", "concept_id": "Greeting"}]
+            }
+        }
+
+
+class ListConcepts(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "concepts": [{"id": "Greeting", "properties": {}}]
             }
         }

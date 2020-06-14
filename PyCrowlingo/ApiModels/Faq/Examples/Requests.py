@@ -16,25 +16,26 @@ class Search(BaseModel):
         }
 
 
-class CreateQuestion(BaseModel):
+class CreateQuestions(BaseModel):
     class Config:
         _model_id = "japanese_faq"
-        _variations = {'en': "I'm no longer in charge of class, so I want to unregister.",
-                       "ja": "授業担当者ではなくなったので登録解除したい。"}
-        _answer_id = "HGBkrUrM"
+        _questions = [{"variations": {'en': "I'm no longer in charge of class, so I want to unregister.",
+                                      "ja": "授業担当者ではなくなったので登録解除したい。"},
+                       "answer_id": "HGBkrUrM"
+                       }]
         schema_extra = {
             "example": {
-                "variations": _variations
+                "questions": _questions
             },
-            "_python": [f"model_id = \"{_model_id}\"", f"variations = {_variations}",
-                        f"answer_id = \"{_answer_id}\"",
-                        "client.faq.create_question(model_id, variations, answer_id=answer_id)"]
+            "_python": [f"model_id = \"{_model_id}\"",
+                        f"questions = {_questions}",
+                        "client.faq.create_questions(model_id, questions)"]
         }
 
 
-class CreateAnswer(BaseModel):
+class CreateAnswers(BaseModel):
     class Config:
-        _variations = {
+        _answers = [{"variations": {
             'en': "Even if you are not a regular student, you can use kibaco if you have been "
                   "issued a User ID for 'Information System for Educational Research'. If you "
                   "are a research student or special course student, and you have not "
@@ -46,11 +47,12 @@ class CreateAnswer(BaseModel):
                 'システム管理室2（e-learning-ml●ml.tmu.ac.jp'
                 '、●をアットマークに変えてください）宛てに申請メール（科目名、授業番号、解除する教員氏名、解除する教員の教育研究用情報システムID）を主担当教員からお送りいただくか、主担当教員をCC'
                 'に入れてお送りいただく必要があります。'}
+        }]
         _model_id = 'japanese_faq'
         schema_extra = {
-            "example": {"model_id": _model_id, "variations": _variations},
-            "_python": [f"model_id = \"{_model_id}\"", f"variations = {_variations}",
-                        "client.faq.create_answer(model_id, variations)"]
+            "example": {"answers": _answers},
+            "_python": [f"model_id = \"{_model_id}\"", f"answers = {_answers}",
+                        "client.faq.create_answers(model_id, answers)"]
         }
 
 
@@ -79,4 +81,52 @@ class DeleteAnswer(BaseModel):
         schema_extra = {
             "_python": [f"model_id = \"{_model_id}\"", f"answer_id = \"{_answer_id}\"",
                         "client.faq.delete_answer(model_id, answer_id)"]
+        }
+
+
+class UpdateQuestion(BaseModel):
+    class Config:
+        _model_id = "japanese_faq"
+        _answer_id = "A11"
+        _question_id = "GPcbbjvo"
+        schema_extra = {
+            "example": {
+                "answer_id": _answer_id
+            },
+            "_python": [f"model_id = \"{_model_id}\"", f"question_id = \"{_question_id}\"",
+                        f"answer_id = \"{_answer_id}\"",
+                        "client.faq.update_question(model_id, question_id, answer_id=answer_id)"]
+        }
+
+
+class UpdateAnswer(BaseModel):
+    class Config:
+        _model_id = "japanese_faq"
+        _variations = {"en": "Google it."}
+        _answer_id = "HGBkrUrM"
+        schema_extra = {
+            "example": {
+                "variations": _variations
+            },
+            "_python": [f"model_id = \"{_model_id}\"", f"answer_id = \"{_answer_id}\"",
+                        f"variations = {_variations}",
+                        "client.faq.update_answer(model_id, answer_id, variations=variations)"]
+        }
+
+
+class ListQuestions(BaseModel):
+    class Config:
+        _model_id = "japanese_faq"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.faq.list_questions(model_id)"]
+        }
+
+
+class ListAnswers(BaseModel):
+    class Config:
+        _model_id = "japanese_faq"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        "client.faq.list_answers(model_id)"]
         }
