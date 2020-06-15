@@ -31,7 +31,8 @@ class InternalError(CrowlingoException):
 class ModelNotTrained(CrowlingoException):
 
     def __init__(self):
-        super().__init__(400, "You have to train this model before performing this action.")
+        super().__init__(423, "This model is not trained yet. You have to wait until it is trained or "
+                              "run the training before performing this action.")
 
 
 class BadCredentials(CrowlingoException):

@@ -1,14 +1,12 @@
 import logging
 from typing import Any, Dict, Optional, Text
 
+from ..Errors import ModelNotFound
 from rasa.nlu.classifiers import classifier
 from rasa.nlu.config import RasaNLUModelConfig
 from rasa.nlu.training_data import Message, TrainingData
-from requests import HTTPError
 
 from .. import Client
-from ..ApiModels import Classifier
-from ..Multi import Bulk, Pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -53,14 +51,10 @@ class IntentClassifier(classifier.IntentClassifier):
         """
         try:
             self.client.classifier.clear_model(self.model_id)
-        except HTTPError as e:
-            if e.status_code == 404:
-                self.client.classifier.create_model(self.model_id)
-            else:
-                raise e
-        bulk = Bulk(self.client)
+        except ModelNotFound:
+            self.client.classifier.create_model(self.model_id)
+        docs = []
         for message in training_data.training_examples:
-            bulk.add(Pipeline().add(Classifier.CreateSentence, model_id=self.model_id, text=message.text,
-                                    class_id=message.get("intent")))
-        bulk.call()
+            docs.append({"text": message.text, "class_id": message.get("intent")})
+        self.client.classifier.create_documents(self.model_id, docs)
         self.client.classifier.train_model(self.model_id)
