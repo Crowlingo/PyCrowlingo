@@ -5,16 +5,13 @@ from PyCrowlingo.Errors import CrowlingoException
 from lazy import lazy
 from requests import HTTPError
 
-from .Admin import Admin
 from . import Errors
 from .Classifier import Classifier
 from .Concepts import Concepts
-from .Corpus import Corpus
 from .Entities import Entities
 from .Faq import Faq
 from .Html import Html
 from .Languages import Languages
-from .News import News
 from .Phrases import Phrases
 from .Summary import Summary
 from .Syntax import Syntax
@@ -83,17 +80,10 @@ class Client:
             raise exception
         return res.json()
 
-    @lazy
-    def admin(self):
-        return Admin(self)
 
     @lazy
     def concepts(self):
         return Concepts(self)
-
-    @lazy
-    def corpus(self):
-        return Corpus(self)
 
     @lazy
     def entities(self):
@@ -114,10 +104,6 @@ class Client:
     @lazy
     def languages(self):
         return Languages(self)
-
-    @lazy
-    def news(self):
-        return News(self)
 
     @lazy
     def phrases(self):
