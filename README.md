@@ -55,8 +55,8 @@ The response will be [Pydantic](https://github.com/samuelcolvin/pydantic) object
 So, you can get the values with the response's attributes:  
 
 ```python
-print(res.classes[0].class_id)
-# =>  'Software Recommendation'
+print(client.languages.detect(text).languages_confidence)
+# =>  '[ConfidenceLang(name='French', code='fr', confidence=98.0)]'
 ```
 
 ### Pipeline
