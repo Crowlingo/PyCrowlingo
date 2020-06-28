@@ -35,7 +35,7 @@ Or using your account credentials:
 
  ```python
 from PyCrowlingo import Client
-client = Client('[EMAIL]', '[PASSWORD]')
+client = Client(username='[EMAIL]', password='[PASSWORD]')
 ```
 
 ### QuickStart
@@ -44,11 +44,10 @@ You can call all the endpoints available on Crowlingo. All of them are detailed 
 
 
 ```python
-model_id = "AskUbuntu"
 text = "Est-il recommandé d'utiliser MongoDb pour indexer mes documents ?"
-res = client.classifier.classify(model_id, text)
+res = client.languages.detect(text)
 print(res)
-# => classes=[ClassDetection(class_id='Software Recommendation', confidence=0.865559518920126), ClassDetection(class_id='None', confidence=0.08626591166898656), ClassDetection(class_id='Make Update', confidence=0.023677259150309892), ClassDetection(class_id='Setup Printer', confidence=0.012666236228835963), ClassDetection(class_id='Shutdown Computer', confidence=0.011831074031741516)]
+# => Detect(sentences=[Sentence(start=0, end=65, languages_confidence=[ConfidenceLang(name='French', code='fr', confidence=98.0)], text="Est-il recommandé d'utiliser MongoDb pour indexer mes documents ?")], languages_confidence=[ConfidenceLang(name='French', code='fr', confidence=98.0)])
 
 ```
 
