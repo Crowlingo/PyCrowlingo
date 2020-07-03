@@ -41,51 +41,6 @@ class DeleteDocument(BaseModel):
         }
 
 
-class CreateModel(BaseModel):
-    class Config:
-        _model_id = "AskUbuntu"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.classifier.create_model(model_id)"]
-        }
-
-
-class TrainModel(BaseModel):
-    class Config:
-        _model_id = "AskUbuntu"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.classifier.train_model(model_id)"]
-        }
-
-
-class DeployModel(BaseModel):
-    class Config:
-        _model_id = "AskUbuntu"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.classifier.deploy_model(model_id)"]
-        }
-
-
-class ClearModel(BaseModel):
-    class Config:
-        _model_id = "AskUbuntu"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.classifier.clear_model(model_id)"]
-        }
-
-
-class DeleteModel(BaseModel):
-    class Config:
-        _model_id = "AskUbuntu"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.classifier.delete_model(model_id)"]
-        }
-
-
 class UpdateDocument(BaseModel):
     class Config:
         _model_id = "AskUbuntu"
@@ -98,6 +53,16 @@ class UpdateDocument(BaseModel):
             "_python": [f"model_id = \"{_model_id}\"", f"document_id = \"{_document_id}\"",
                         f"class_id = \"{_class_id}\"",
                         "client.classifier.update_document(model_id, document_id, class_id=class_id)"]
+        }
+
+
+class GetDocument(BaseModel):
+    class Config:
+        _model_id = "AskUbuntu"
+        _document_id = "PQk4AQbu"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"", f"document_id = \"{_document_id}\""
+                        "client.classifier.get_document(model_id, document_id)"]
         }
 
 

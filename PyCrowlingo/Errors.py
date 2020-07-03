@@ -141,6 +141,15 @@ class RequestEntityTooLarge(CrowlingoException):
         super().__init__(413, "The payload of your body is too large. Try to split your request with smaller payload.")
 
 
+class TrainingError(CrowlingoException):
+
+    def __init__(self, msg):
+        prefix = "An error happened during the training: "
+        msg = str(msg)
+        msg = f"{prefix}{msg}" if not msg.startswith(prefix) else msg
+        super().__init__(404, msg)
+
+
 # ####### FULL #######
 
 
@@ -170,6 +179,12 @@ class AlreadySubscribed(CrowlingoException):
         super().__init__(404, "The user has already subscribed to this plan.")
 
 
+class NoTrainingData(CrowlingoException):
+
+    def __init__(self):
+        super().__init__(400, "There is no training data associated to these model. Add some documents before running "
+                              "the train process or increase the `train_ratio` field in model_config.")
+
 class ErrorsEnum(Enum):
     INTERNAL_ERROR = InternalError
     MODEL_NOT_TRAINED = ModelNotTrained
@@ -189,9 +204,12 @@ class ErrorsEnum(Enum):
     BAD_PARAMETERS_QUERY = BadParametersQuery
     CONTENT_LENGTH_REQUIRED = ContentLengthRequired
     REQUEST_ENTITY_TOO_LARGE = RequestEntityTooLarge
+    TRAINING_ERROR = TrainingError
 
     # ###### FULL ########
     BAD_ADMIN_PERMS = BadAdminPerms
     SUBSCRIPTION_NOT_FOUND = SubscriptionNotFound
     DUPLICATE_EMAIL = DuplicateEmail
     ALREADY_SUBSCRIBED = AlreadySubscribed
+    NO_TRAINING_DATA = NoTrainingData
+

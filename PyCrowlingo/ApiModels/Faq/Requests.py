@@ -23,41 +23,6 @@ class Search(Examples.Search, Base, Document):
         pass
 
 
-class TrainModel(Base):
-    _endpoint = "{model_id}/train"
-    _price = 1
-    _responses = [403, 404]
-
-    class Query(ModelId):
-        pass
-
-
-class DeployModel(Base):
-    _endpoint = "{model_id}/deploy"
-    _price = 1
-    _responses = [403, 404]
-
-    class Query(ModelId):
-        pass
-
-
-class ClearModel(Base):
-    _endpoint = "{model_id}/clear"
-    _price = 1
-    _responses = [403, 404]
-
-    class Query(ModelId):
-        pass
-
-
-class CreateModel(Base):
-    _endpoint = "{model_id}/create"
-    _responses = [403, 409]
-
-    class Query(ModelId):
-        pass
-
-
 class CreateQuestions(Examples.CreateQuestions, Base):
     _endpoint = "{model_id}/questions"
     _responses = [403, 404, 409, 411, 413]
@@ -71,15 +36,6 @@ class CreateAnswers(Examples.CreateAnswers, Base):
     _endpoint = "{model_id}/answers"
     _responses = [403, 404, 409, 411, 413]
     answers: List[CustomAnswer]
-
-    class Query(ModelId):
-        pass
-
-
-class DeleteModel(Examples.DeleteModel, Base):
-    _endpoint = "{model_id}"
-    _method = "DELETE"
-    _responses = [403, 404]
 
     class Query(ModelId):
         pass
@@ -123,10 +79,28 @@ class UpdateAnswer(Examples.UpdateAnswer, Base):
         pass
 
 
+class GetQuestion(Examples.GetQuestion, Base):
+    _endpoint = "{model_id}/questions/{question_id}"
+    _method = "GET"
+    _responses = [404]
+
+    class Query(ModelId, QuestionId):
+        pass
+
+
+class GetAnswer(Examples.GetAnswer, Base):
+    _endpoint = "{model_id}/answers/{answer_id}"
+    _method = "GET"
+    _responses = [404]
+
+    class Query(ModelId, AnswerId):
+        pass
+
+
 class ListQuestions(Examples.ListQuestions, Base):
     _endpoint = "{model_id}/questions/"
     _method = "GET"
-    _responses = [403, 404]
+    _responses = [404]
 
     class Query(ModelId, Id, AnswerId, Pagination):
         pass
@@ -135,7 +109,7 @@ class ListQuestions(Examples.ListQuestions, Base):
 class ListAnswers(Examples.ListAnswers, Base):
     _endpoint = "{model_id}/answers/"
     _method = "GET"
-    _responses = [403, 404]
+    _responses = [404]
 
     class Query(ModelId, Id, Pagination):
         pass

@@ -5,7 +5,7 @@ from .Connector import Connector
 class User(Connector):
 
     def login(self, username, password):
-        res = Models.Login().call(self.client, username, password)
+        res = Models.Login.fill().call(self.client, username, password)
         self.client.set_token(res.access_token)
         self.client._plan = res.plan
         return res
@@ -19,7 +19,7 @@ class User(Connector):
         return res
 
     def refresh_token(self, username, password):
-        res = Models.RefreshToken().call(self.client, username, password)
+        res = Models.RefreshToken.fill().call(self.client, username, password)
         self.client.set_token(res.access_token)
         return res
 

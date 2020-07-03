@@ -1,26 +1,10 @@
 from typing import List
 
 from .Examples import Responses as Examples
-from ..Attributes import Concepts, ConceptId, LabelId, ModelId, ConceptsId, LabelsId, LabelModel, ConceptModel
+from ..Attributes import Concepts, ConceptId, LabelId, ConceptsId, LabelsId, LabelModel, ConceptModel
 
 
 class Extract(Examples.Extract, Concepts):
-    pass
-
-
-class TrainModel(Examples.TrainModel, ModelId):
-    pass
-
-
-class DeployModel(Examples.DeployModel, ModelId):
-    pass
-
-
-class ClearModel(Examples.ClearModel, ModelId):
-    pass
-
-
-class CreateModel(Examples.CreateModel, ModelId):
     pass
 
 
@@ -40,15 +24,19 @@ class UpdateLabel(Examples.UpdateLabel, LabelId):
     pass
 
 
-class DeleteModel(Examples.DeleteModel, ModelId):
-    pass
-
-
 class DeleteLabel(Examples.DeleteLabel, LabelId):
     pass
 
 
 class DeleteConcept(Examples.DeleteConcept, ConceptId):
+    pass
+
+
+class GetLabel(Examples.GetLabel, LabelModel):
+    pass
+
+
+class GetConcept(Examples.GetConcept, ConceptModel):
     pass
 
 

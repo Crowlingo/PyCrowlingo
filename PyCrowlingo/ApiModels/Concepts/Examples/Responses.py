@@ -48,16 +48,6 @@ class Extract(BaseModel):
             }
         }
 
-
-class CreateModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "my_model"
-            }
-        }
-
-
 class CreateConcepts(BaseModel):
     class Config:
         schema_extra = {
@@ -75,14 +65,6 @@ class CreateLabels(BaseModel):
             }
         }
 
-
-class DeleteModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "my_model"
-            }
-        }
 
 
 class DeleteConcept(BaseModel):
@@ -104,33 +86,6 @@ class DeleteLabel(BaseModel):
         }
 
 
-class TrainModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "my_model"
-            }
-        }
-
-
-class DeployModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "my_model"
-            }
-        }
-
-
-class ClearModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "my_model"
-            }
-        }
-
-
 class UpdateConcept(BaseModel):
     class Config:
         schema_extra = {
@@ -145,6 +100,24 @@ class UpdateLabel(BaseModel):
         schema_extra = {
             "example": {
                 "label_id": "aiJ4gtGm"
+            }
+        }
+
+
+class GetLabel(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "text": "Bonjour", "lang": "fr", "concept_id": "Greeting"
+            }
+        }
+
+
+class GetConcept(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "id": "Greeting", "properties": {}
             }
         }
 

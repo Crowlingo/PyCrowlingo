@@ -131,6 +131,7 @@ except CrowlingoException as e:
 Here is the list of available exceptions:
 |Class | Error ID | Status code | Description|
 |---|---|---|---|
+TrainingError | TRAINING_ERROR | 400 | An error happened during the training
 TokenNotFound |TOKEN_NOT_FOUND | 401 | Token not found. Insert your token in the query parameter with api_key=[YOUR_TOKEN] or in the headers with x-api-key:[YOUR TOKEN].
 BadCredentials |BAD_CREDENTIALS | 401 | Could not validate credentials. Their might be an error in your token or email/password. Maybe your account has been disabled. Please contact us if you do not understand the reason.
 TestModelForbidden | TEST_MODEL_FORBIDDEN | 403 | You do not have access to the test version of this model. Ask the access to the owner of the model or use the prod version of this model.

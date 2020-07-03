@@ -1,7 +1,7 @@
 import time
 
 import requests
-from PyCrowlingo.Errors import CrowlingoException
+from .Errors import CrowlingoException
 from lazy import lazy
 from requests import HTTPError
 
@@ -12,6 +12,7 @@ from .Entities import Entities
 from .Faq import Faq
 from .Html import Html
 from .Languages import Languages
+from .Model import Model
 from .Phrases import Phrases
 from .Summary import Summary
 from .Syntax import Syntax
@@ -80,7 +81,6 @@ class Client:
             raise exception
         return res.json()
 
-
     @lazy
     def concepts(self):
         return Concepts(self)
@@ -104,6 +104,10 @@ class Client:
     @lazy
     def languages(self):
         return Languages(self)
+
+    @lazy
+    def model(self):
+        return Model(self)
 
     @lazy
     def phrases(self):

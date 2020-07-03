@@ -1,2 +1,1 @@
-from .Requests import Classify, CreateDocuments, TrainModel, DeployModel, ClearModel, CreateModel, \
-    DeleteModel, DeleteDocument, UpdateDocument, ListDocuments
+from .Requests import Classify, CreateDocuments, GetDocument, DeleteDocument, UpdateDocument, ListDocuments

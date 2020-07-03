@@ -21,41 +21,6 @@ class Extract(Examples.Extract, Base, Document, Properties):
         pass
 
 
-class TrainModel(Examples.TrainModel, Base):
-    _endpoint = "{model_id}/train"
-    _price = 1
-    _responses = [403, 404]
-
-    class Query(ModelId):
-        pass
-
-
-class DeployModel(Examples.DeployModel, Base):
-    _endpoint = "{model_id}/train"
-    _price = 1
-    _responses = [403, 404]
-
-    class Query(ModelId):
-        pass
-
-
-class ClearModel(Examples.ClearModel, Base):
-    _endpoint = "{model_id}/clear"
-    _price = 1
-    _responses = [403, 404]
-
-    class Query(ModelId):
-        pass
-
-
-class CreateModel(Examples.CreateModel, Base):
-    _endpoint = "{model_id}/create"
-    _responses = [403, 409]
-
-    class Query(ModelId):
-        pass
-
-
 class CreateConcepts(Examples.CreateConcepts, Base):
     _endpoint = "{model_id}/concepts"
     _responses = [403, 404, 409, 411, 413]
@@ -69,15 +34,6 @@ class CreateLabels(Examples.CreateLabels, Base):
     _endpoint = "{model_id}/labels"
     _responses = [403, 404, 409, 411, 413]
     labels: List[CustomLabel]
-
-    class Query(ModelId):
-        pass
-
-
-class DeleteModel(Examples.DeleteModel, Base):
-    _endpoint = "{model_id}"
-    _method = "DELETE"
-    _responses = [403, 404]
 
     class Query(ModelId):
         pass
@@ -120,10 +76,28 @@ class UpdateLabel(Examples.UpdateLabel, Base, Text, Lang, ConceptId):
         pass
 
 
+class GetLabel(Examples.GetLabel, Base):
+    _endpoint = "{model_id}/labels/{label_id}"
+    _method = "GET"
+    _responses = [404]
+
+    class Query(ModelId, LabelId):
+        pass
+
+
+class GetConcept(Examples.GetConcept, Base):
+    _endpoint = "{model_id}/concepts/{concept_id}"
+    _method = "GET"
+    _responses = [404]
+
+    class Query(ModelId, ConceptId):
+        pass
+
+
 class ListLabels(Examples.ListLabels, Base):
     _endpoint = "{model_id}/labels/"
     _method = "GET"
-    _responses = [403, 404]
+    _responses = [404]
 
     class Query(ModelId, Id, Lang, ConceptId, Text, Pagination):
         pass
@@ -132,7 +106,7 @@ class ListLabels(Examples.ListLabels, Base):
 class ListConcepts(Examples.ListLabels, Base):
     _endpoint = "{model_id}/concepts/"
     _method = "GET"
-    _responses = [403, 404]
+    _responses = [404]
 
     class Query(ModelId, Id, Pagination):
         pass

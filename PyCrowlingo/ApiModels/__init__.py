@@ -11,3 +11,4 @@ from . import User
 from . import Classifier
 from . import Attributes
 from . import Multi
+from . import Model

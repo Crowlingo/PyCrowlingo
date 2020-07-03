@@ -17,15 +17,6 @@ class Extract(BaseModel):
         }
 
 
-class CreateModel(BaseModel):
-    class Config:
-        _model_id = "my_model"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.concepts.create_model(model_id)"]
-        }
-
-
 class CreateConcepts(BaseModel):
     class Config:
         _model_id = "my_model"
@@ -52,15 +43,6 @@ class CreateLabels(BaseModel):
         }
 
 
-class DeleteModel(BaseModel):
-    class Config:
-        _model_id = "my_model"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.concepts.delete_model(model_id)"]
-        }
-
-
 class DeleteConcept(BaseModel):
     class Config:
         _model_id = "my_model"
@@ -78,33 +60,6 @@ class DeleteLabel(BaseModel):
         schema_extra = {
             "_python": [f"model_id = \"{_model_id}\"", f"label_id = {_label_id}",
                         "client.concepts.delete_label(model_id, label_id)"]
-        }
-
-
-class TrainModel(BaseModel):
-    class Config:
-        _model_id = "my_model"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.concepts.train_model(model_id)"]
-        }
-
-
-class DeployModel(BaseModel):
-    class Config:
-        _model_id = "my_model"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.concepts.deploy_model(model_id)"]
-        }
-
-
-class ClearModel(BaseModel):
-    class Config:
-        _model_id = "my_model"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.concepts.clear_model(model_id)"]
         }
 
 
@@ -136,6 +91,27 @@ class UpdateLabel(BaseModel):
                         f"text = \"{_text}\"",
                         "client.concepts.update_label(model_id, label_id, text=text)"]
         }
+
+
+class GetConcept(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        _concept_id = "Greeting"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"", f"concept_id = \"{_concept_id}\"",
+                        "client.concepts.get_concept(model_id, concept_id)"]
+        }
+
+
+class GetLabel(BaseModel):
+    class Config:
+        _model_id = "my_model"
+        _label_id = "aiJ4gtGm"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"", f"label_id = \"{_label_id}\"",
+                        "client.concepts.get_label(model_id, label_id)"]
+        }
+
 
 
 class ListConcepts(BaseModel):

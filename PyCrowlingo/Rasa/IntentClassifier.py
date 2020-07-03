@@ -50,11 +50,11 @@ class IntentClassifier(classifier.IntentClassifier):
 
         """
         try:
-            self.client.classifier.clear_model(self.model_id)
+            self.client.model.clear(self.model_id)
         except ModelNotFound:
-            self.client.classifier.create_model(self.model_id)
+            self.client.model.create(self.model_id, "clf")
         docs = []
         for message in training_data.training_examples:
             docs.append({"text": message.text, "class_id": message.get("intent")})
         self.client.classifier.create_documents(self.model_id, docs)
-        self.client.classifier.train_model(self.model_id)
+        self.client.model.train(self.model_id)

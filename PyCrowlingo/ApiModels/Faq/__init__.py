@@ -1,3 +1,3 @@
-from .Requests import Search, TrainModel, DeployModel, ClearModel, CreateModel, CreateQuestions,\
-    CreateAnswers, UpdateAnswer, UpdateQuestion, DeleteModel, DeleteQuestion, DeleteAnswer, ListAnswers, ListQuestions
+from .Requests import Search, CreateQuestions, CreateAnswers, UpdateAnswer, UpdateQuestion, DeleteQuestion, \
+    DeleteAnswer, GetQuestion, GetAnswer, ListAnswers, ListQuestions
 from . import Responses

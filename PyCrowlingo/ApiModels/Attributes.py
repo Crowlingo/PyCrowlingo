@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional, Union, Dict, Any
 
-from pydantic import BaseModel, AnyUrl, EmailStr, Field, constr
+from pydantic import BaseModel, AnyUrl, EmailStr, Field, constr, validator
 from pydantic.schema import datetime
 
 ID_TYPE = constr(regex=r"[a-zA-Z0-9_\-]*")
@@ -265,6 +265,10 @@ class ModelId(BaseModel):
     model_id: ID_TYPE
 
 
+class ModelOwner(BaseModel):
+    model_owner: Optional[EmailStr] = None
+
+
 class ProdVersion(BaseModel):
     prod_version: bool = False
 
@@ -342,6 +346,7 @@ class DocumentId(BaseModel):
 
 class ClassDetection(ClassId):
     confidence: float
+    additional_features: Dict[str, Any] = {}
 
 
 class Visualize(BaseModel):
@@ -360,9 +365,12 @@ class CommonsPipeline(BaseModel):
 class ModelInfo(BaseModel):
     name: ID_TYPE
     category: str
-    trained: bool
+    training_status: str
+    training_error: Optional[str]
     owner: str
     deployed: bool
+    metrics: Optional[Dict[str, Any]]
+    collaborators: Dict[str, int]
 
 
 class Error(BaseModel):
@@ -370,9 +378,19 @@ class Error(BaseModel):
     msg: str
 
 
+class Category(str, Enum):
+    CLASSIFIER: str = "clf"
+    FAQ: str = "faq"
+    CONCEPTS: str = "concepts"
+
+
 class ModelType(str, Enum):
     SVM: str = "svm"
     DEEP: str = "deep"
+
+
+class OptionalFeatures(BaseModel):
+    optional_features: Dict[str, Union[str, int]] = {}
 
 
 class CustomConcept(Id, Properties):
@@ -383,7 +401,7 @@ class CustomLabel(Id, ConceptId, Document):
     precision: float = 0.75
 
 
-class CustomDocument(Id, Document, ClassId):
+class CustomDocument(Id, Document, ClassId, OptionalFeatures):
     pass
 
 
@@ -421,8 +439,7 @@ class Pagination(BaseModel):
     sort: str = "id"
     ascending: bool = True
 
-
-class DocumentModel(Id, Document, ClassId):
+class DocumentModel(Id, Document, ClassId, OptionalFeatures):
     pass
 
 
@@ -440,3 +457,63 @@ class QuestionModel(Document, Id, Variations, AnswerId):
 
 class AnswerModel(Document, Id, Variations):
     pass
+
+
+class ClfConfigSVM(BaseModel):
+    C: List[int] = [1, 2, 5, 10, 20, 100]
+    kernels: List[str] = ["linear"]
+    max_cross_validation_folds: int = 5
+    probability: bool = True
+    class_weight: str = "balanced"
+    scoring: str = 'f1_weighted'
+
+
+class ClfConfigDeep(BaseModel):
+    hidden_length: List[int] = [1, 2]
+    hidden_neurons: List[int] = [32, 64, 128, 256]
+    bidirectional: List[bool] = [False, True]
+    dropout: List[float] = [0, 0.1, 0.2, 0.4]
+    l2_val: List[float] = [0.001, 0.01, 0.1, 0.2, 0.3]
+    optimizer: str = 'adam'
+    loss: str = 'categorical_crossentropy'
+    metrics: List[str] = ['accuracy']
+    max_epochs: int = 150
+    monitor: str = 'val_loss'
+    patience: int = 5
+
+
+class SplitData(BaseModel):
+    train_ratio: float = Field(0.8, lt=1.0, gt=0.0)
+
+
+class ClfConfig(SplitData, ClfConfigSVM, ClfConfigDeep):
+    pass
+
+
+class ModelConfig(BaseModel):
+    model_config: Optional[ClfConfig]
+
+    @validator("model_config", always=True)
+    def set_default_config(cls, v):
+        if v:
+            return v
+        return ClfConfig()
+
+
+class CollaboratorPermissions(BaseModel):
+    query: bool = True
+    read: bool = False
+    write: bool = False
+    deploy: bool = False
+    train: bool = False
+    collaborators: bool = False
+
+
+class Permissions(BaseModel):
+    permissions: Optional[CollaboratorPermissions]
+
+    @validator("permissions", always=True)
+    def set_default_permissions(cls, v):
+        if v:
+            return v
+        return CollaboratorPermissions()

@@ -31,47 +31,24 @@ class DeleteDocument(BaseModel):
         }
 
 
-class TrainModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "AskUbuntu"
-            }
-        }
-
-
-class DeployModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "AskUbuntu"
-            }
-        }
-
-
-class ClearModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "AskUbuntu"
-            }
-        }
-
-
-class DeleteModel(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "model_id": "AskUbuntu"
-            }
-        }
-
-
 class UpdateDocument(BaseModel):
     class Config:
         schema_extra = {
             "example": {
                 "document_id": "PQk4AQbu"
+            }
+        }
+
+
+class GetDocument(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                "id": "PQk4AQbu",
+                "text": "How to setup wireless printing from a printer connected via usb on Ubuntu Server 12.10?",
+                "lang": "en",
+                "class_id": "Setup Printer",
+                "optional_features": {}
             }
         }
 
@@ -84,7 +61,8 @@ class ListDocuments(BaseModel):
                                "text": "How to setup wireless printing from a printer connected via usb on Ubuntu "
                                        "Server 12.10?",
                                "lang": "en",
-                               "class_id": "Setup Printer"
+                               "class_id": "Setup Printer",
+                               "optional_features": {}
                                }]
             }
         }

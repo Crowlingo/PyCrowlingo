@@ -56,15 +56,6 @@ class CreateAnswers(BaseModel):
         }
 
 
-class DeleteModel(BaseModel):
-    class Config:
-        _model_id = "japanese_faq"
-        schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.faq.delete_model(model_id)"]
-        }
-
-
 class DeleteQuestion(BaseModel):
     class Config:
         _model_id = "japanese_faq"
@@ -111,6 +102,26 @@ class UpdateAnswer(BaseModel):
             "_python": [f"model_id = \"{_model_id}\"", f"answer_id = \"{_answer_id}\"",
                         f"variations = {_variations}",
                         "client.faq.update_answer(model_id, answer_id, variations=variations)"]
+        }
+
+
+class GetQuestion(BaseModel):
+    class Config:
+        _model_id = "japanese_faq"
+        _question_id = "GPcbbjvo"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"", f"question_id = \"{_question_id}\""
+                        "client.faq.get_question(model_id, question_id)"]
+        }
+
+
+class GetAnswer(BaseModel):
+    class Config:
+        _model_id = "japanese_faq"
+        _answer_id = "HGBkrUrM"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"", f"answer_id = \"{_answer_id}\"",
+                        "client.faq.get_answer(model_id, answer_id)"]
         }
 
 
