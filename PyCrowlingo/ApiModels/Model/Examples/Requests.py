@@ -13,9 +13,10 @@ class Get(BaseModel):
 class Create(BaseModel):
     class Config:
         _model_id = "AskUbuntu"
+        _model_type = "clf"
         schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"",
-                        "client.model.create(model_id)"]
+            "_python": [f"model_id = \"{_model_id}\"", f"model_type = \"{_model_type}\""
+                        "client.model.create(model_id, model_type)"]
         }
 
 
