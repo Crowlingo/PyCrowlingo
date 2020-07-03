@@ -159,6 +159,19 @@ client.classifier.upload_csv(model_id, "data.csv", fieldnames=["text", "class_id
 It will split the dataset in several parts to avoid exceed the payload size limit.
 If you have a more specific dataset format, you can do it by using the functions listed on [the API documentation](https://crowlingo.com/docs).
 
+
+## Wait for training
+The function `client.model.train` is asynchronous, that means it will send you a response before the end of the process. Then if you want to perform an action which need a trained model like for example `client.model.deploy`, you have to wait until the end of the process. The training status can be watched with the function `client.model.get`: `training_status` will contain the status of the training, `training_error` will tell you if an error occurred.
+
+All of this process can be easily managed with the function `client.model.wait_training`:
+
+```python
+client.model.train(model_id)
+client.model.wait_training(model_id)
+client.model.deploy(model_id)
+```
+ 
+
 ## Rasa
 
 Crowlingo services can be very useful to create a polyglot chatbot using an existing one. The easiest way is to do it through [Rasa](https://github.com/RasaHQ/rasa).
