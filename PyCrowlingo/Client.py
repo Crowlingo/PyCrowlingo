@@ -1,7 +1,7 @@
 import time
 
 import requests
-from .Errors import CrowlingoException
+from .Errors import CrowlingoException, InternalError
 from lazy import lazy
 from requests import HTTPError
 
@@ -55,11 +55,14 @@ class Client:
         try:
             res.raise_for_status()
         except HTTPError:
-            res_json = res.json()
-            detail = res_json.get("detail", {})
+            status_code = res.status_code
+            if status_code != 500:
+                res_json = res.json()
+                detail = res_json.get("detail", {})
+            else:
+                detail = InternalError().detail
             error_id = detail.get("error_id")
             msg = detail.get("msg")
-            status_code = res.status_code
             if error_id in Errors.ErrorsEnum.__members__:
                 new_e = Errors.ErrorsEnum[error_id]
                 if new_e == Errors.ErrorsEnum.MINUTE_LIMIT_REACHED:
@@ -80,6 +83,7 @@ class Client:
         if exception:
             raise exception
         return res.json()
+
 
     @lazy
     def concepts(self):

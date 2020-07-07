@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from . import Responses
 from .Examples import Requests as Examples
-from ..Attributes import ModelId, Document, DocumentId, ProdVersion, ModelType, CustomDocument, Text, Lang, \
-    ID_TYPE, ClassId, Pagination, Id, ModelConfig, ModelOwner, Permissions, Email, OptionalFeatures
+from ..Attributes import ModelId, Document, DocumentId, ProdVersion, CustomDocument, Text, Lang, \
+    ID_TYPE, ClassId, Pagination, Id, ModelOwner, OptionalFeatures
 from ..Basic import BasicModel
 
 

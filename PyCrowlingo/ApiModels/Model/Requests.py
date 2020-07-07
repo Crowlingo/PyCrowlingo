@@ -1,3 +1,5 @@
+from typing import Union
+
 from . import Responses
 from .Examples import Requests as Examples
 from ..Attributes import ModelId, ModelType, ModelConfig, ModelOwner, Permissions, Email, Category
@@ -26,7 +28,7 @@ class Train(Examples.Train, Base, ModelConfig):
     _responses = [403, 404]
 
     class Query(ModelId, ModelOwner):
-        model_type: ModelType = ModelType.SVM
+        model_type: Union[ModelType, str] = ModelType.SVM
 
 
 class Create(Examples.Create, Base):
