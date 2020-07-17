@@ -8,7 +8,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name='PyCrowlingo',
-    version='0.4.2',
+    version='0.4.3',
     packages=find_packages(),
     install_requires=requirements,
     long_description=long_description,
