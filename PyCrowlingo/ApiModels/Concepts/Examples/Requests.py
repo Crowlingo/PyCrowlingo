@@ -17,6 +17,19 @@ class Extract(BaseModel):
         }
 
 
+class ExtractCustom(BaseModel):
+    class Config:
+        _text = "Hello my friend !"
+        _model_id = "my_model"
+        schema_extra = {
+            "example": {
+                "text": _text
+            },
+            "_python": [f"model_id = \"{_model_id}\"", f"text = \"{_text}\"",
+                        "client.concepts.extract_custom(my_model, text)"]
+        }
+
+
 class CreateConcepts(BaseModel):
     class Config:
         _model_id = "my_model"

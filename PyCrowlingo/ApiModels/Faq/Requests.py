@@ -3,7 +3,7 @@ from typing import List, Dict
 from . import Responses
 from .Examples import Requests as Examples
 from ..Attributes import ModelId, QuestionId, AnswerId, Document, ProdVersion, CustomQuestion, \
-    CustomAnswer, ID_TYPE, Pagination, Id
+    CustomAnswer, ID_TYPE, Pagination, Id, ModelOwner
 from ..Basic import BasicModel
 
 
@@ -19,7 +19,7 @@ class Search(Examples.Search, Base, Document):
     _responses = [400, 404]
     variations: List[str] = []  # try to pass it in query
 
-    class Query(ModelId, ProdVersion):
+    class Query(ModelId, ModelOwner, ProdVersion):
         pass
 
 
@@ -28,7 +28,7 @@ class CreateQuestions(Examples.CreateQuestions, Base):
     _responses = [403, 404, 409, 411, 413]
     questions: List[CustomQuestion]
 
-    class Query(ModelId):
+    class Query(ModelId, ModelOwner):
         pass
 
 
@@ -37,7 +37,7 @@ class CreateAnswers(Examples.CreateAnswers, Base):
     _responses = [403, 404, 409, 411, 413]
     answers: List[CustomAnswer]
 
-    class Query(ModelId):
+    class Query(ModelId, ModelOwner):
         pass
 
 
@@ -46,7 +46,7 @@ class DeleteQuestion(Examples.DeleteQuestion, Base):
     _method = "DELETE"
     _responses = [403, 404]
 
-    class Query(ModelId, QuestionId):
+    class Query(ModelId, ModelOwner, QuestionId):
         pass
 
 
@@ -55,7 +55,7 @@ class DeleteAnswer(Examples.DeleteAnswer, Base):
     _method = "DELETE"
     _responses = [403, 404]
 
-    class Query(ModelId, AnswerId):
+    class Query(ModelId, ModelOwner, AnswerId):
         pass
 
 
@@ -65,7 +65,7 @@ class UpdateQuestion(Examples.UpdateQuestion, Base, AnswerId):
     _responses = [403, 404, 411, 413]
     variations: Dict[ID_TYPE, str] = None
 
-    class Query(ModelId, QuestionId):
+    class Query(ModelId, ModelOwner, QuestionId):
         pass
 
 
@@ -75,7 +75,7 @@ class UpdateAnswer(Examples.UpdateAnswer, Base):
     _responses = [403, 404, 411, 413]
     variations: Dict[ID_TYPE, str] = None
 
-    class Query(ModelId, AnswerId):
+    class Query(ModelId, ModelOwner, AnswerId):
         pass
 
 
@@ -84,7 +84,7 @@ class GetQuestion(Examples.GetQuestion, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, QuestionId):
+    class Query(ModelId, ModelOwner, QuestionId):
         pass
 
 
@@ -93,7 +93,7 @@ class GetAnswer(Examples.GetAnswer, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, AnswerId):
+    class Query(ModelId, ModelOwner, AnswerId):
         pass
 
 
@@ -102,7 +102,7 @@ class ListQuestions(Examples.ListQuestions, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, Id, AnswerId, Pagination):
+    class Query(ModelId, ModelOwner, Id, AnswerId, Pagination):
         pass
 
 
@@ -111,5 +111,5 @@ class ListAnswers(Examples.ListAnswers, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, Id, Pagination):
+    class Query(ModelId, ModelOwner, Id, Pagination):
         pass

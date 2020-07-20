@@ -43,8 +43,19 @@ class Extract(BaseModel):
                              {'properties': None,
                               'labels': [{'mentions': [{'start': 257, 'end': 262}], 'text': 'power'}],
                               'weight': 0.04447164239684429, 'id': 'Q25107'}
-                             ],
-                'lang': 'en'
+                             ]
+            }
+        }
+
+
+class ExtractCustom(BaseModel):
+    class Config:
+        schema_extra = {
+            "example": {
+                'concepts': [{'properties': None,
+                              'labels': [{'mentions': [{'start': 0, 'end': 4, 'similarity': 0.8119}], 'text': 'Hello'}],
+                              'id': 'Greeting'},
+                             ]
             }
         }
 

@@ -3,7 +3,7 @@ from typing import List, Dict
 from . import Responses
 from .Examples import Requests as Examples
 from ..Attributes import Precision, Split, ModelId, Properties, Document, ConceptId, LabelId, OptionalModelId, \
-    ProdVersion, CustomConcept, CustomLabel, Text, Lang, Pagination, Id
+    ProdVersion, CustomConcept, CustomLabel, Text, Lang, Pagination, Id, ModelOwner
 from ..Basic import BasicModel
 
 
@@ -17,7 +17,15 @@ class Extract(Examples.Extract, Base, Document, Properties):
     _price = 1
     _responses = [400, 404]
 
-    class Query(Precision, Split, OptionalModelId, ProdVersion):
+    class Query(Precision, Split):
+        pass
+
+
+class ExtractCustom(Examples.ExtractCustom, Base, Document, Properties):
+    _price = 1
+    _responses = [400, 404]
+
+    class Query(ModelId, ModelOwner, ProdVersion):
         pass
 
 
@@ -26,7 +34,7 @@ class CreateConcepts(Examples.CreateConcepts, Base):
     _responses = [403, 404, 409, 411, 413]
     concepts: List[CustomConcept]
 
-    class Query(ModelId):
+    class Query(ModelId, ModelOwner):
         pass
 
 
@@ -35,7 +43,7 @@ class CreateLabels(Examples.CreateLabels, Base):
     _responses = [403, 404, 409, 411, 413]
     labels: List[CustomLabel]
 
-    class Query(ModelId):
+    class Query(ModelId, ModelOwner):
         pass
 
 
@@ -44,7 +52,7 @@ class DeleteConcept(Examples.DeleteConcept, Base):
     _method = "DELETE"
     _responses = [403, 404]
 
-    class Query(ModelId, ConceptId):
+    class Query(ModelId, ModelOwner, ConceptId):
         pass
 
 
@@ -53,7 +61,7 @@ class DeleteLabel(Examples.DeleteLabel, Base):
     _method = "DELETE"
     _responses = [403, 404]
 
-    class Query(ModelId, LabelId):
+    class Query(ModelId, ModelOwner, LabelId):
         pass
 
 
@@ -63,7 +71,7 @@ class UpdateConcept(Examples.UpdateConcept, Base):
     _responses = [403, 404, 411, 413]
     properties: Dict[str, str] = None
 
-    class Query(ModelId, ConceptId):
+    class Query(ModelId, ModelOwner, ConceptId):
         pass
 
 
@@ -72,7 +80,7 @@ class UpdateLabel(Examples.UpdateLabel, Base, Text, Lang, ConceptId):
     _method = "PATCH"
     _responses = [403, 404, 411, 413]
 
-    class Query(ModelId, LabelId):
+    class Query(ModelId, ModelOwner, LabelId):
         pass
 
 
@@ -81,7 +89,7 @@ class GetLabel(Examples.GetLabel, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, LabelId):
+    class Query(ModelId, ModelOwner, LabelId):
         pass
 
 
@@ -90,7 +98,7 @@ class GetConcept(Examples.GetConcept, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, ConceptId):
+    class Query(ModelId, ModelOwner, ConceptId):
         pass
 
 
@@ -99,7 +107,7 @@ class ListLabels(Examples.ListLabels, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, Id, Lang, ConceptId, Text, Pagination):
+    class Query(ModelId, ModelOwner, Id, Lang, ConceptId, Text, Pagination):
         pass
 
 
@@ -108,5 +116,5 @@ class ListConcepts(Examples.ListLabels, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, Id, Pagination):
+    class Query(ModelId, ModelOwner, Id, Pagination):
         pass

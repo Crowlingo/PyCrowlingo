@@ -84,7 +84,6 @@ class Client:
             raise exception
         return res.json()
 
-
     @lazy
     def concepts(self):
         return Concepts(self)

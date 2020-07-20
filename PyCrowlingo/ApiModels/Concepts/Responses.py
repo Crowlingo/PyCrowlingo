@@ -1,11 +1,15 @@
 from typing import List
 
 from .Examples import Responses as Examples
-from ..Attributes import Concepts, ConceptId, LabelId, ConceptsId, LabelsId, LabelModel, ConceptModel
+from ..Attributes import Concepts, ConceptId, LabelId, ConceptsId, LabelsId, LabelModel, ConceptModel, CustomConceptRes
 
 
 class Extract(Examples.Extract, Concepts):
     pass
+
+
+class ExtractCustom(Examples.ExtractCustom):
+    concepts: List[CustomConceptRes]
 
 
 class CreateConcepts(Examples.CreateConcepts, ConceptsId):

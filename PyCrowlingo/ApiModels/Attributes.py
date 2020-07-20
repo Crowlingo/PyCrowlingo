@@ -11,6 +11,10 @@ class Id(BaseModel):
     id: Optional[ID_TYPE] = None
 
 
+class Similarity(BaseModel):
+    similarity: float
+
+
 class Position(BaseModel):
     start: int
     end: int
@@ -21,10 +25,6 @@ class Properties(BaseModel):
                                                                    description="Properties associated to each concept",
                                                                    example=['titles.fr', 'titles.en', 'coordinates',
                                                                             'stock_exchange'])
-
-
-class ConceptsProperties(BaseModel):
-    concepts_properties: Optional[Union[List[str], Dict[str, Any]]] = None
 
 
 class Text(BaseModel):
@@ -54,6 +54,18 @@ class Weight(BaseModel):
 
 class Concept(Id, Weight, Labels, Properties):
     pass
+
+
+class CustomMentionRes(Position, Similarity):
+    pass
+
+
+class CustomLabelRes(Text):
+    mentions: List[CustomMentionRes]
+
+
+class CustomConceptRes(Id, Properties):
+    labels: List[CustomLabelRes]
 
 
 class Concepts(BaseModel):
@@ -137,10 +149,6 @@ class BasicArticles(BaseModel):
 
 class Combination(BaseModel):
     combination: List[str]
-
-
-class Similarity(BaseModel):
-    similarity: float
 
 
 class CombinationSimilarity(Combination, Similarity):
@@ -381,7 +389,7 @@ class Error(BaseModel):
 class Category(str, Enum):
     CLASSIFIER: str = "clf"
     FAQ: str = "faq"
-    CONCEPTS: str = "concepts"
+    CONCEPTS: str = "cpt"
 
 
 class ModelType(str, Enum):
@@ -422,11 +430,11 @@ class AnswersId(BaseModel):
 
 
 class ConceptsId(BaseModel):
-    documents_id: List[ID_TYPE]
+    concepts_id: List[ID_TYPE]
 
 
 class LabelsId(BaseModel):
-    documents_id: List[ID_TYPE]
+    labels_id: List[ID_TYPE]
 
 
 class DocumentsId(BaseModel):
@@ -438,6 +446,7 @@ class Pagination(BaseModel):
     page_size: int = Field(10, ge=1)
     sort: str = "id"
     ascending: bool = True
+
 
 class DocumentModel(Id, Document, ClassId, OptionalFeatures):
     pass
@@ -483,7 +492,7 @@ class ClfConfigDeep(BaseModel):
 
 
 class SplitData(BaseModel):
-    train_ratio: float = Field(0.8, lt=1.0, gt=0.0)
+    train_ratio: float = Field(0.8, le=1.0, gt=0.0)
 
 
 class ClfConfig(SplitData, ClfConfigSVM, ClfConfigDeep):
