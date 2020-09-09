@@ -5,7 +5,7 @@ from .ApiModels import Phrases as Models
 
 class Phrases(Connector):
 
-    def extract_keys(self, text, lang=None, limit=None, visualize=None):
+    def extract_keys(self, text, lang=None, limit=None, normalize=None):
         return Models.ExtractKeys.fill(**locals()).call(self.client)
 
     def match(self, text, phrase, lang=None, phrase_lang=None, precision=None, visualize=False):
