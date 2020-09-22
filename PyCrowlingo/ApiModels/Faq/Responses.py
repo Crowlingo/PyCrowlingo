@@ -1,14 +1,12 @@
-from typing import Optional, List
+from typing import List
 
 from .Examples import Responses as Examples
-from ..Attributes import Answer, Question, QuestionId, AnswerId, QuestionsId, AnswersId, QuestionModel, \
-    AnswerModel
+from ..Attributes import QuestionId, AnswerId, QuestionsId, AnswersId, QuestionModel, \
+    AnswerModel, FaqSearchResult
 
 
 class Search(Examples.Search):
-    question: Optional[Question]
-    answer: Optional[Answer]
-    similarity: Optional[float]
+    results: List[FaqSearchResult]
 
 
 class CreateQuestions(Examples.CreateQuestions, QuestionsId):

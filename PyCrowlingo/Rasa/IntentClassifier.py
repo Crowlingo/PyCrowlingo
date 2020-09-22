@@ -1,12 +1,12 @@
 import logging
 from typing import Any, Dict, Optional, Text
 
-from ..Errors import ModelNotFound
 from rasa.nlu.classifiers import classifier
 from rasa.nlu.config import RasaNLUModelConfig
 from rasa.nlu.training_data import Message, TrainingData
 
-from .. import Client
+from .Utils import get_client
+from ..Errors import ModelNotFound
 
 logger = logging.getLogger(__name__)
 
@@ -16,13 +16,16 @@ class IntentClassifier(classifier.IntentClassifier):
 
     def __init__(self, component_config: Optional[Dict[Text, Any]] = None) -> None:
         super().__init__(component_config)
-        self.client = Client(component_config["token"])
-        self.model_id = component_config["model_id"]
+        self.client = get_client(component_config)
+        self.model_id = component_config.get("model_id")
+        self.model_owner = component_config.get("model_owner")
+        self.prod_version = component_config.get("prod_version")
 
     def process(self, message: Message, **kwargs: Any) -> None:
         """Return the most likely intent and its probability for a message."""
 
-        res = self.client.classifier.classify(self.model_id, message.text)
+        res = self.client.classifier.classify(self.model_id, message.text, model_owner=self.model_owner,
+                                              prod_version=self.prod_version)
         intent_ranking = [
             {"name": intent.class_id, "confidence": intent.confidence}
             for intent in res.classes
@@ -50,11 +53,13 @@ class IntentClassifier(classifier.IntentClassifier):
 
         """
         try:
-            self.client.model.clear(self.model_id)
+            self.client.model.clear(self.model_id, model_owner=self.model_owner)
         except ModelNotFound:
             self.client.model.create(self.model_id, "clf")
+            self.model_owner = None
+            self.prod_version = None
         docs = []
         for message in training_data.training_examples:
             docs.append({"text": message.text, "class_id": message.get("intent")})
-        self.client.classifier.create_documents(self.model_id, docs)
-        self.client.model.train(self.model_id)
+        self.client.classifier.create_documents(self.model_id, docs, model_owner=self.model_owner)
+        self.client.model.train(self.model_id, model_owner=self.model_owner)

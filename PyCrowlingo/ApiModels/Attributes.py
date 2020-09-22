@@ -468,6 +468,12 @@ class AnswerModel(Document, Id, Variations):
     pass
 
 
+class FaqSearchResult(BaseModel):
+    question: Optional[Question]
+    answer: Optional[Answer]
+    similarity: Optional[float]
+
+
 class ClfConfigSVM(BaseModel):
     C: List[int] = [1, 2, 5, 10, 20, 100]
     kernels: List[str] = ["linear"]
