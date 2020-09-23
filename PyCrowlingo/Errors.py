@@ -160,6 +160,13 @@ class TrainingError(CrowlingoException):
         super().__init__(404, msg, headers)
 
 
+class BadEnvironmentPerms(CrowlingoException):
+
+    def __init__(self, headers=None):
+        super().__init__(403, "You do not have the permission to query this URL."
+                              "Use the endpoint linked to your environment. "
+                              "If the problem persists, please contact us.", headers)
+
 # ####### FULL #######
 
 
