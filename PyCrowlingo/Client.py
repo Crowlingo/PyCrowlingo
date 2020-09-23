@@ -23,12 +23,13 @@ from .User import User
 class Client:
 
     def __init__(self, token=None, username=None, password=None, url="https://crowlingo.com/api/v1",
-                 throttling_management=True, retry=3):
+                 throttling_management=True, retry=3, verbose=True):
         self._url = url
         self._token = token
         self._throttling_management = throttling_management
         self._retry = retry
         self._plan = None
+        self._verbose = verbose
         self.get_token(username, password)
 
     def get_token(self, username=None, password=None):
@@ -66,7 +67,10 @@ class Client:
             if error_id in Errors.ErrorsEnum.__members__:
                 new_e = Errors.ErrorsEnum[error_id]
                 if new_e == Errors.ErrorsEnum.MINUTE_LIMIT_REACHED:
-                    time.sleep(int(res.headers.get("x-minute-reset")))
+                    wait = int(res.headers.get("x-minute-reset"))
+                    if self._verbose:
+                        print(f"Minute limit reached: waiting {wait} seconds")
+                    time.sleep(wait)
                     recall = True
                 if new_e == Errors.ErrorsEnum.INTERNAL_ERROR:
                     recall = True
