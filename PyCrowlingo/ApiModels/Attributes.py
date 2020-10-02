@@ -21,7 +21,7 @@ class Position(BaseModel):
 
 
 class Properties(BaseModel):
-    properties: Optional[Union[List[str], Dict[str, Any]]] = Field(None,
+    properties: Optional[Union[List[str], Dict[str, Any]]] = Field({},
                                                                    description="Properties associated to each concept",
                                                                    example=['titles.fr', 'titles.en', 'coordinates',
                                                                             'stock_exchange'])

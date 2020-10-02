@@ -1,4 +1,5 @@
 import time
+from json import JSONDecodeError
 
 import requests
 from .Errors import CrowlingoException, InternalError
@@ -58,8 +59,11 @@ class Client:
         except HTTPError:
             status_code = res.status_code
             if status_code != 500:
-                res_json = res.json()
-                detail = res_json.get("detail", {})
+                try:
+                    res_json = res.json()
+                    detail = res_json.get("detail", {})
+                except JSONDecodeError:
+                    raise CrowlingoException(status_code, res.text)
             else:
                 detail = InternalError().detail
             error_id = detail.get("error_id")

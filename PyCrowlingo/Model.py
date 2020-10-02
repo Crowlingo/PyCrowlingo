@@ -30,14 +30,14 @@ class Model(Connector):
     def remove_collaborator(self, model_id, email, model_owner=None):
         return Models.RemoveCollaborator.fill(**locals()).call(self.client)
 
-    def wait_training(self, model_id, time_sleep=3):
+    def wait_training(self, model_id, model_owner=None, time_sleep=3):
         import time
 
         done = False
         res = None
         while not done:
             time.sleep(time_sleep)
-            res = self.client.model.get(model_id)
+            res = self.client.model.get(model_id, model_owner)
             status = res.training_status
             done = status == 'done'
             if status == "error":
