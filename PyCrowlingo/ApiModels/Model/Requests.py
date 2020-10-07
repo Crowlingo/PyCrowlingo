@@ -2,7 +2,7 @@ from typing import Union
 
 from . import Responses
 from .Examples import Requests as Examples
-from ..Attributes import ModelId, ModelType, ModelConfig, ModelOwner, Permissions, Email, Category
+from ..Attributes import ModelId, ModelType, ModelConfig, ModelOwner, Permissions, Email, Category, Metadata
 from ..Basic import BasicModel
 
 
@@ -31,7 +31,7 @@ class Train(Examples.Train, Base, ModelConfig):
         model_type: Union[ModelType, str] = ModelType.SVM
 
 
-class Create(Examples.Create, Base):
+class Create(Examples.Create, Base, Metadata):
     _endpoint = "{model_id}/create"
     _responses = [403, 409]
 

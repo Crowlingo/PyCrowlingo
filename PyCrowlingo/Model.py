@@ -9,7 +9,7 @@ class Model(Connector):
     def get(self, model_id, model_owner=None):
         return Models.Get.fill(**locals()).call(self.client)
 
-    def create(self, model_id, category, model_type=None):
+    def create(self, model_id, category, model_type=None, description=None):
         return Models.Create.fill(**locals()).call(self.client)
 
     def deploy(self, model_id, model_owner=None):

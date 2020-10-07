@@ -2,6 +2,7 @@ import typing
 from collections import defaultdict
 from typing import Any, Optional, Text, Dict
 
+from PyCrowlingo.Errors import ModelNotFound
 from rasa.nlu.extractors.extractor import EntityExtractor
 from rasa.nlu.training_data import Message, TrainingData
 from rasa.nlu.config import RasaNLUModelConfig
@@ -38,19 +39,28 @@ class CustomConceptsExtractor(EntityExtractor):
         self.precision = component_config.get("precision")
 
     def train(self, training_data: TrainingData, config: Optional[RasaNLUModelConfig] = None, **kwargs: Any) -> None:
+        try:
+            self.client.model.clear(self.model_id, model_owner=self.model_owner, prod_version=self.prod_version)
+        except ModelNotFound:
+            self.client.model.create(self.model_id, "cpt")
+            self.model_owner = None
+            self.prod_version = None
         concepts = defaultdict(set)
+        synonyms = defaultdict(set)
         for key, value in training_data.entity_synonyms.items():
-            concepts[key].add(value)
+            synonyms[key].add(value)
         for msg in training_data.entity_examples:
             for entity in msg.get(ENTITIES, []):
-                label = msg.text[entity["start"]: entity["end"]]
-                concept = str(entity.get("value"))
+                label = str(entity.get("value"))
+                concept = str(entity.get("entity"))
                 concepts[concept].add(label)
+                if label in synonyms:
+                    concepts[concept] |= synonyms.pop(label)
         self.client.concepts.create_concepts(self.model_id, concepts=[{"id": concept} for concept in concepts.keys()],
                                              model_owner=self.model_owner)
         self.client.concepts.create_labels(self.model_id,
                                            labels=[{"text": label, "concept_id": concept}
-                                                   for concept, label in concepts.items()],
+                                                   for concept, labels in concepts.items() for label in labels],
                                            model_owner=self.model_owner)
         self.client.model.train(self.model_id, model_owner=self.model_owner)
         self.client.model.wait_training(self.model_id, model_owner=self.model_owner)
@@ -66,24 +76,25 @@ class CustomConceptsExtractor(EntityExtractor):
         on any context attributes created by a call to
         :meth:`components.Component.process`
         of components previous to this one."""
-        res = self.client.concepts.extract(message.text, lang=self.lang,
-                                           properties=self.properties,
-                                           model_owner=self.model_owner,
-                                           model_id=self.model_id,
-                                           prod_version=self.prod_version)
+        res = self.client.concepts.extract_custom(text=message.text, lang=self.lang,
+                                                  properties=self.properties,
+                                                  model_owner=self.model_owner,
+                                                  model_id=self.model_id,
+                                                  prod_version=self.prod_version)
         concepts = []
         for concept in res.concepts:
             for label in concept.labels:
                 for mention in label.mentions:
                     concepts.append({
+                        "entity": concept.id,
                         "value": label.text,
                         "start": mention.start,
                         "end": mention.end,
-                        "similarity": mention.similarity,
-                        "concept": {
-                            "id": concept.id,
-                            "properties": concept.properties,
-                        }
+                        "confidence": mention.similarity,
+                        "properties": concept.properties,
                     })
-        extracted = self.add_extractor_name(concepts)
-        message.set("concepts", message.get("concepts", []) + extracted, add_to_output=True)
+        all_extracted = self.add_extractor_name(concepts)
+        dimensions = self.component_config.get("dimensions")
+        extracted = self.filter_irrelevant_entities(all_extracted, dimensions)
+        extracted = self.add_extractor_name(extracted)
+        message.set(ENTITIES, message.get(ENTITIES, []) + extracted, add_to_output=True)

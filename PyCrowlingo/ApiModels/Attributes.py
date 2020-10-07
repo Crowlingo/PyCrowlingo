@@ -370,7 +370,11 @@ class CommonsPipeline(BaseModel):
     commons: Dict[str, Any] = {}
 
 
-class ModelInfo(BaseModel):
+class Metadata(BaseModel):
+    metadata: Optional[Dict[str, Any]] = {}
+
+
+class ModelInfo(Metadata):
     name: ID_TYPE
     category: str
     training_status: str
@@ -532,3 +536,4 @@ class Permissions(BaseModel):
         if v:
             return v
         return CollaboratorPermissions()
+

@@ -52,5 +52,8 @@ class EntitiesExtractor(EntityExtractor):
             }
             for ent in res.entities
         ]
-        extracted = self.add_extractor_name(entities)
+        all_extracted = self.add_extractor_name(entities)
+        dimensions = self.component_config.get("dimensions")
+        extracted = self.filter_irrelevant_entities(all_extracted, dimensions)
+        extracted = self.add_extractor_name(extracted)
         message.set(ENTITIES, message.get(ENTITIES, []) + extracted, add_to_output=True)

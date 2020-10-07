@@ -1,6 +1,7 @@
 import typing
 from typing import Any, Optional, Text, Dict
 
+from rasa.nlu.constants import ENTITIES, TEXT
 from rasa.nlu.extractors.extractor import EntityExtractor
 from rasa.nlu.training_data import Message
 
@@ -10,8 +11,8 @@ if typing.TYPE_CHECKING:
     pass
 
 
-class ConceptsExtractor(EntityExtractor):
-    """Link the entities with wikipedia pages and get additional """
+class DucklingExtractor(EntityExtractor):
+    """Retrieve named entities from 18 types in 100+ languages"""
 
     # Defines the default configuration parameters of a component
     # these values can be overwritten in the pipeline configuration
@@ -28,10 +29,6 @@ class ConceptsExtractor(EntityExtractor):
     def __init__(self, component_config: Optional[Dict[Text, Any]] = None) -> None:
         super().__init__(component_config)
         self.client = get_client(component_config)
-        self.lang = component_config.get("lang")
-        self.properties = component_config.get("properties")
-        self.split = component_config.get("split")
-        self.precision = component_config.get("precision")
 
     def process(self, message: Message, **kwargs: Any) -> None:
         """Process an incoming message.
@@ -44,24 +41,37 @@ class ConceptsExtractor(EntityExtractor):
         on any context attributes created by a call to
         :meth:`components.Component.process`
         of components previous to this one."""
-        res = self.client.concepts.extract(message.text, lang=self.lang,
-                                           properties=self.properties,
-                                           split=self.split,
-                                           precision=self.precision)
-        concepts = []
-        for concept in res.concepts:
-            for label in concept.labels:
-                for mention in label.mentions:
-                    concepts.append({
-                        "value": label.text,
-                        "start": mention.start,
-                        "end": mention.end,
-                        "entity": concept.id,
-                        "properties": concept.properties,
-                        "confidence": concept.weight
-                    })
-        all_extracted = self.add_extractor_name(concepts)
+
+        matches = self.client.entities.duckling(message.get(TEXT)).duckling
+        all_extracted = self.convert_duckling_format_to_rasa(matches)
         dimensions = self.component_config.get("dimensions")
         extracted = self.filter_irrelevant_entities(all_extracted, dimensions)
         extracted = self.add_extractor_name(extracted)
-        message.set("concepts", message.get("concepts", []) + extracted, add_to_output=True)
+        message.set(ENTITIES, message.get(ENTITIES, []) + extracted, add_to_output=True)
+
+    def extract_value(self, match: Dict[Text, Any]) -> Dict[Text, Any]:
+        if match["value"].get("type") == "interval":
+            value = {
+                "to": match["value"].get("to", {}).get("value"),
+                "from": match["value"].get("from", {}).get("value"),
+            }
+        else:
+            value = match["value"].get("value")
+
+        return value
+
+    def convert_duckling_format_to_rasa(self, matches: typing.List[Dict[Text, Any]]) -> typing.List[Dict[Text, Any]]:
+        extracted = []
+        for match in matches:
+            value = self.extract_value(match)
+            entity = {
+                "start": match["start"],
+                "end": match["end"],
+                "text": match.get("body", match.get("text", None)),
+                "value": value,
+                "confidence": 1.0,
+                "additional_info": match["value"],
+                "entity": match["dim"],
+            }
+            extracted.append(entity)
+        return extracted
