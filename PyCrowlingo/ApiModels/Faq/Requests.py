@@ -20,7 +20,7 @@ class Search(Examples.Search, Base, Document):
     variations: List[str] = []  # try to pass it in query
 
     class Query(ModelId, ModelOwner, ProdVersion):
-        pass
+        limit: int = 1
 
 
 class CreateQuestions(Examples.CreateQuestions, Base):

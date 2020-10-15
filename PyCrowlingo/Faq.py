@@ -5,7 +5,7 @@ from .ApiModels import Faq as Models
 
 class Faq(Connector):
 
-    def search(self, model_id, text, model_owner=None, lang=None, variations=None, prod_version=None):
+    def search(self, model_id, text, model_owner=None, lang=None, variations=None, prod_version=None, limit=None):
         return Models.Search.fill(**locals()).call(self.client)
 
     def create_questions(self, model_id, questions, model_owner=None):
