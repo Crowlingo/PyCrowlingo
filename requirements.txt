@@ -1,5 +1,5 @@
 setuptools~=47.1.1
 pydantic[email]~=1.5.1
 typing~=3.7.4.1
-requests~=2.23.0
+requests~=2.22.0
 lazy~=1.4
