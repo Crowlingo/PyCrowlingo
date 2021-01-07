@@ -1,9 +1,9 @@
 import typing
 from typing import Any, Optional, Text, Dict
 
-from rasa.nlu.constants import ENTITIES, TEXT
 from rasa.nlu.extractors.extractor import EntityExtractor
-from rasa.nlu.training_data import Message
+from rasa.shared.nlu.constants import ENTITIES, TEXT
+from rasa.shared.nlu.training_data.message import Message
 
 from .Utils import get_client
 

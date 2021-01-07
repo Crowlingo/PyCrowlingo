@@ -26,7 +26,3 @@ class RefreshToken(Examples.RefreshToken):
 class Info(Examples.Info):
     email: str
     plan: str
-
-
-class ModelsInfo(Examples.ModelsInfo):
-    models: List[ModelInfo]

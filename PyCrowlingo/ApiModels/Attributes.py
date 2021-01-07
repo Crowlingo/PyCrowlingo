@@ -4,7 +4,8 @@ from typing import List, Optional, Union, Dict, Any
 from pydantic import BaseModel, AnyUrl, EmailStr, Field, constr, validator
 from pydantic.schema import datetime
 
-ID_TYPE = constr(regex=r"[a-zA-Z0-9_\-]*")
+ID_TYPE = constr(regex=r"^[a-zA-Z0-9_\-: ]*$")
+NAME_TYPE = constr(regex=r"^[a-zA-Z0-9_\- ]*$")
 
 
 class Id(BaseModel):
@@ -273,8 +274,8 @@ class ModelId(BaseModel):
     model_id: ID_TYPE
 
 
-class ModelOwner(BaseModel):
-    model_owner: Optional[EmailStr] = None
+class Name(BaseModel):
+    name: NAME_TYPE
 
 
 class ProdVersion(BaseModel):
@@ -283,6 +284,10 @@ class ProdVersion(BaseModel):
 
 class Variations(BaseModel):
     variations: Dict[str, str] = {}
+
+
+class VariationsList(BaseModel):
+    variations: List[str] = []
 
 
 class QuestionId(BaseModel):
@@ -348,6 +353,14 @@ class ClassId(BaseModel):
     class_id: ID_TYPE = None
 
 
+class OldClassId(BaseModel):
+    old_class_id: ID_TYPE
+
+
+class NewClassId(BaseModel):
+    new_class_id: ID_TYPE
+
+
 class DocumentId(BaseModel):
     document_id: ID_TYPE
 
@@ -370,20 +383,37 @@ class CommonsPipeline(BaseModel):
     commons: Dict[str, Any] = {}
 
 
-class Metadata(BaseModel):
-    metadata: Optional[Dict[str, Any]] = {}
+class Description(BaseModel):
+    description: Optional[str]
 
 
-class ModelInfo(Metadata):
-    name: ID_TYPE
+class Markers(BaseModel):
+    markers: Optional[List[ID_TYPE]]
+
+
+class Version(BaseModel):
+    metrics: Optional[Dict[str, Any]]
+    version_id: int
+
+
+class Public(BaseModel):
+    public: Optional[bool]
+
+
+class ModelInfo(Name, Description, Markers, Public):
+    versions: Dict[str, Version]
     category: str
     training_status: str
+    training_progress: int
     training_error: Optional[str]
+    training_start: Optional[str]
+    training_end: Optional[str]
+    deploying_start: Optional[str]
+    deploying_end: Optional[str]
     owner: str
-    deployed: bool
-    metrics: Optional[Dict[str, Any]]
     collaborators: Dict[str, int]
-
+    metadata: Optional[Dict[str, Any]]
+    deployed: bool
 
 class Error(BaseModel):
     error_id: str
@@ -391,9 +421,17 @@ class Error(BaseModel):
 
 
 class Category(str, Enum):
-    CLASSIFIER: str = "clf"
+    CLASSIFIER: str = "classifier"
     FAQ: str = "faq"
-    CONCEPTS: str = "cpt"
+    CONCEPTS: str = "concepts"
+
+    @classmethod
+    def _missing_(cls, value):
+        aliases = {"cpt": cls.CONCEPTS,
+                   "clf": cls.CLASSIFIER}
+        if value in aliases:
+            return aliases[value]
+        return super()._missing_(value)
 
 
 class ModelType(str, Enum):
@@ -405,23 +443,23 @@ class OptionalFeatures(BaseModel):
     optional_features: Dict[str, Union[str, int]] = {}
 
 
-class CustomConcept(Id, Properties):
+class CustomConcept(Id, Properties, Markers):
     pass
 
 
-class CustomLabel(Id, ConceptId, Document):
+class CustomLabel(Id, ConceptId, Document, Markers):
     precision: float = 0.75
 
 
-class CustomDocument(Id, Document, ClassId, OptionalFeatures):
+class CustomDocument(Id, Document, ClassId, OptionalFeatures, Markers):
     pass
 
 
-class CustomQuestion(Variations, Id, AnswerId):
+class CustomQuestion(Variations, Id, AnswerId, Markers):
     pass
 
 
-class CustomAnswer(Variations, Id):
+class CustomAnswer(Variations, Id, Markers):
     pass
 
 
@@ -448,8 +486,6 @@ class DocumentsId(BaseModel):
 class Pagination(BaseModel):
     page: int = Field(1, ge=1)
     page_size: int = Field(10, ge=1)
-    sort: str = "id"
-    ascending: bool = True
 
 
 class DocumentModel(Id, Document, ClassId, OptionalFeatures):
@@ -464,18 +500,12 @@ class ConceptModel(Document, Id, Properties):
     pass
 
 
-class QuestionModel(Document, Id, Variations, AnswerId):
+class QuestionModel(Id, Variations, AnswerId):
     pass
 
 
-class AnswerModel(Document, Id, Variations):
+class AnswerModel(Id, Variations):
     pass
-
-
-class FaqSearchResult(BaseModel):
-    question: Optional[Question]
-    answer: Optional[Answer]
-    similarity: Optional[float]
 
 
 class ClfConfigSVM(BaseModel):
@@ -509,6 +539,12 @@ class ClfConfig(SplitData, ClfConfigSVM, ClfConfigDeep):
     pass
 
 
+class FaqSearchResult(BaseModel):
+    question: Optional[Question]
+    answer: Optional[Answer]
+    similarity: Optional[float]
+
+
 class ModelConfig(BaseModel):
     model_config: Optional[ClfConfig]
 
@@ -536,4 +572,3 @@ class Permissions(BaseModel):
         if v:
             return v
         return CollaboratorPermissions()
-

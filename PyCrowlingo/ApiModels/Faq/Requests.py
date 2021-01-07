@@ -3,7 +3,7 @@ from typing import List, Dict
 from . import Responses
 from .Examples import Requests as Examples
 from ..Attributes import ModelId, QuestionId, AnswerId, Document, ProdVersion, CustomQuestion, \
-    CustomAnswer, ID_TYPE, Pagination, Id, ModelOwner
+    CustomAnswer, ID_TYPE, Pagination, Id, Lang, VariationsList
 from ..Basic import BasicModel
 
 
@@ -13,13 +13,12 @@ class Base(BasicModel):
     _price = 0
 
 
-class Search(Examples.Search, Base, Document):
+class Search(Examples.Search, Base, Document, VariationsList):
     _endpoint = "{model_id}/search"
     _price = 1
     _responses = [400, 404]
-    variations: List[str] = []  # try to pass it in query
 
-    class Query(ModelId, ModelOwner, ProdVersion):
+    class Query(ModelId, ProdVersion):
         limit: int = 1
 
 
@@ -28,7 +27,7 @@ class CreateQuestions(Examples.CreateQuestions, Base):
     _responses = [403, 404, 409, 411, 413]
     questions: List[CustomQuestion]
 
-    class Query(ModelId, ModelOwner):
+    class Query(ModelId):
         pass
 
 
@@ -37,7 +36,7 @@ class CreateAnswers(Examples.CreateAnswers, Base):
     _responses = [403, 404, 409, 411, 413]
     answers: List[CustomAnswer]
 
-    class Query(ModelId, ModelOwner):
+    class Query(ModelId):
         pass
 
 
@@ -46,7 +45,7 @@ class DeleteQuestion(Examples.DeleteQuestion, Base):
     _method = "DELETE"
     _responses = [403, 404]
 
-    class Query(ModelId, ModelOwner, QuestionId):
+    class Query(ModelId, QuestionId):
         pass
 
 
@@ -55,7 +54,7 @@ class DeleteAnswer(Examples.DeleteAnswer, Base):
     _method = "DELETE"
     _responses = [403, 404]
 
-    class Query(ModelId, ModelOwner, AnswerId):
+    class Query(ModelId, AnswerId):
         pass
 
 
@@ -65,7 +64,7 @@ class UpdateQuestion(Examples.UpdateQuestion, Base, AnswerId):
     _responses = [403, 404, 411, 413]
     variations: Dict[ID_TYPE, str] = None
 
-    class Query(ModelId, ModelOwner, QuestionId):
+    class Query(ModelId, QuestionId):
         pass
 
 
@@ -75,7 +74,7 @@ class UpdateAnswer(Examples.UpdateAnswer, Base):
     _responses = [403, 404, 411, 413]
     variations: Dict[ID_TYPE, str] = None
 
-    class Query(ModelId, ModelOwner, AnswerId):
+    class Query(ModelId, AnswerId):
         pass
 
 
@@ -84,7 +83,7 @@ class GetQuestion(Examples.GetQuestion, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, ModelOwner, QuestionId):
+    class Query(ModelId, QuestionId):
         pass
 
 
@@ -93,7 +92,7 @@ class GetAnswer(Examples.GetAnswer, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, ModelOwner, AnswerId):
+    class Query(ModelId, AnswerId):
         pass
 
 
@@ -102,7 +101,7 @@ class ListQuestions(Examples.ListQuestions, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, ModelOwner, Id, AnswerId, Pagination):
+    class Query(ModelId, Id, AnswerId, Pagination, Lang):
         pass
 
 
@@ -111,5 +110,5 @@ class ListAnswers(Examples.ListAnswers, Base):
     _method = "GET"
     _responses = [404]
 
-    class Query(ModelId, ModelOwner, Id, Pagination):
+    class Query(ModelId, Id, Pagination, Lang):
         pass

@@ -3,7 +3,7 @@ from typing import List, Optional
 from . import Responses
 from .Examples import Requests as Examples
 from ..Attributes import ModelId, Document, DocumentId, ProdVersion, CustomDocument, Text, Lang, \
-    ID_TYPE, ClassId, Pagination, Id, ModelOwner, OptionalFeatures
+    ID_TYPE, ClassId, Pagination, Id, OptionalFeatures, OldClassId, NewClassId
 from ..Basic import BasicModel
 
 
@@ -18,7 +18,7 @@ class Classify(Examples.Classify, Base, Document, OptionalFeatures):
     _price = 1
     _responses = [400, 404]
 
-    class Query(ModelId, ModelOwner, ProdVersion):
+    class Query(ModelId, ProdVersion):
         pass
 
 
@@ -27,7 +27,7 @@ class CreateDocuments(Examples.CreateDocuments, Base):
     _responses = [403, 404, 409, 411, 413]
     documents: List[CustomDocument]
 
-    class Query(ModelId, ModelOwner):
+    class Query(ModelId):
         pass
 
 
@@ -36,7 +36,7 @@ class DeleteDocument(Examples.DeleteDocument, Base):
     _method = "DELETE"
     _responses = [403, 404]
 
-    class Query(ModelId, ModelOwner, DocumentId):
+    class Query(ModelId, DocumentId):
         pass
 
 
@@ -47,23 +47,32 @@ class UpdateDocument(Examples.UpdateDocument, Base, Lang, Text):
 
     class_id: Optional[ID_TYPE] = None
 
-    class Query(ModelId, ModelOwner, DocumentId):
+    class Query(ModelId, DocumentId):
         pass
 
 
 class GetDocument(Examples.GetDocument, Base):
     _endpoint = "{model_id}/documents/{document_id}"
     _method = "GET"
-    _responses = [404]
+    _responses = [403, 404]
 
-    class Query(ModelId, ModelOwner, DocumentId):
+    class Query(ModelId, DocumentId):
         pass
 
 
 class ListDocuments(Examples.ListDocuments, Base):
     _endpoint = "{model_id}/documents/"
     _method = "GET"
-    _responses = [404]
+    _responses = [403, 404]
 
-    class Query(ModelId, ModelOwner, Id, Lang, ClassId, Pagination):
+    class Query(ModelId, Id, Lang, ClassId, Pagination):
+        pass
+
+
+class RenameClass(Examples.RenameClass, Base):
+    _endpoint = "{model_id}/classes/{old_class_id}"
+    _method = "PATCH"
+    _responses = [403, 404]
+
+    class Query(ModelId, OldClassId, NewClassId):
         pass

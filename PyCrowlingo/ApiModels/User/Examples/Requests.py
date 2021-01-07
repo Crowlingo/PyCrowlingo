@@ -29,10 +29,3 @@ class Info(BaseModel):
         schema_extra = {
             "_python": ["client.user.info()"]
         }
-
-
-class ModelsInfo(BaseModel):
-    class Config:
-        schema_extra = {
-            "_python": ["client.user.models_info()"]
-        }

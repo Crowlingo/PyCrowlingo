@@ -2,7 +2,8 @@ import typing
 from typing import Any, Optional, Text, Dict
 
 from rasa.nlu.extractors.extractor import EntityExtractor
-from rasa.nlu.training_data import Message
+from rasa.shared.nlu.constants import TEXT
+from rasa.shared.nlu.training_data.message import Message
 
 from .Utils import get_client
 
@@ -44,7 +45,7 @@ class ConceptsExtractor(EntityExtractor):
         on any context attributes created by a call to
         :meth:`components.Component.process`
         of components previous to this one."""
-        res = self.client.concepts.extract(message.text, lang=self.lang,
+        res = self.client.concepts.extract(message.get(TEXT), lang=self.lang,
                                            properties=self.properties,
                                            split=self.split,
                                            precision=self.precision)

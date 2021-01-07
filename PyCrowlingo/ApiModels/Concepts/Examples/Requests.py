@@ -126,7 +126,6 @@ class GetLabel(BaseModel):
         }
 
 
-
 class ListConcepts(BaseModel):
     class Config:
         _model_id = "my_model"

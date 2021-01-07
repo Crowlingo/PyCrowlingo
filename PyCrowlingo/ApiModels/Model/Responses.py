@@ -1,4 +1,5 @@
 from pydantic import EmailStr
+from typing import List
 
 from .Examples import Responses as Examples
 from ..Attributes import ModelId, ModelInfo
@@ -34,3 +35,15 @@ class AddCollaborator(Examples.AddCollaborator):
 
 class RemoveCollaborator(Examples.RemoveCollaborator):
     collaborator: EmailStr
+
+
+class Edit(Examples.Edit, ModelInfo):
+    pass
+
+
+class ListPublic(Examples.ListPublic):
+    models: List[ModelInfo]
+
+
+class ListUser(Examples.ListUser):
+    models: List[ModelInfo]

@@ -20,7 +20,7 @@ class CreateQuestions(BaseModel):
     class Config:
         _model_id = "japanese_faq"
         _questions = [{"variations": {'en': "I'm no longer in charge of class, so I want to unregister.",
-                                      "ja": "授業担当者ではなくなったので登録解除したい。"},
+                                        "ja": "授業担当者ではなくなったので登録解除したい。"},
                        "answer_id": "HGBkrUrM"
                        }]
         schema_extra = {
@@ -111,7 +111,7 @@ class GetQuestion(BaseModel):
         _question_id = "GPcbbjvo"
         schema_extra = {
             "_python": [f"model_id = \"{_model_id}\"", f"question_id = \"{_question_id}\""
-                        "client.faq.get_question(model_id, question_id)"]
+                                                       "client.faq.get_question(model_id, question_id)"]
         }
 
 

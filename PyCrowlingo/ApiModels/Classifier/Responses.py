@@ -1,7 +1,7 @@
 from typing import List
 
 from .Examples import Responses as Examples
-from ..Attributes import ClassDetection, DocumentsId, DocumentId, DocumentModel
+from ..Attributes import ClassDetection, DocumentsId, DocumentId, DocumentModel, ModelInfo
 
 
 class Classify(Examples.Classify):
@@ -26,3 +26,7 @@ class GetDocument(Examples.GetDocument, DocumentModel):
 
 class ListDocuments(Examples.ListDocuments):
     documents: List[DocumentModel]
+
+
+class RenameClass(Examples.RenameClass, ModelInfo):
+    pass

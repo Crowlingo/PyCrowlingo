@@ -24,8 +24,3 @@ class Usage(Examples.Usage, Base):
 
 class Info(Examples.Info, Base):
     pass
-
-
-class ModelsInfo(Examples.ModelsInfo, Base):
-    pass
-

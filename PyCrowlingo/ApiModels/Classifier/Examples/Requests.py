@@ -73,3 +73,16 @@ class ListDocuments(BaseModel):
             "_python": [f"model_id = \"{_model_id}\"",
                         "client.classifier.list_documents(model_id)"]
         }
+
+
+class RenameClass(BaseModel):
+    class Config:
+        _model_id = "AskUbuntu"
+        _old_class_id = "Out Of Scope"
+        _new_class_id = "OOS"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        f"old_class_id= \"{_old_class_id}\"",
+                        f"new_class_id= \"{_new_class_id}\"",
+                        "client.classifier.rename_class(model_id, old_class_id, new_class_id)"]
+        }

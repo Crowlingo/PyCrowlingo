@@ -157,7 +157,7 @@ class TrainingError(CrowlingoException):
         prefix = "An error happened during the training: "
         msg = str(msg)
         msg = f"{prefix}{msg}" if not msg.startswith(prefix) else msg
-        super().__init__(404, msg, headers)
+        super().__init__(400, msg, headers)
 
 
 class BadEnvironmentPerms(CrowlingoException):
@@ -166,6 +166,20 @@ class BadEnvironmentPerms(CrowlingoException):
         super().__init__(403, "You do not have the permission to query this URL."
                               "Use the endpoint linked to your environment. "
                               "If the problem persists, please contact us.", headers)
+
+
+class NoTrainingData(CrowlingoException):
+
+    def __init__(self, headers=None):
+        super().__init__(400, "There is no training data associated to this model. Add some documents before running "
+                         "the train process", headers)
+
+
+class MinTrainingClasses(CrowlingoException):
+
+    def __init__(self, headers=None):
+        super().__init__(400, "You must have at least 2 different classes in your data to train a classifier.", headers)
+
 
 # ####### FULL #######
 
@@ -194,13 +208,6 @@ class AlreadySubscribed(CrowlingoException):
 
     def __init__(self, headers=None):
         super().__init__(404, "The user has already subscribed to this plan.", headers)
-
-
-class NoTrainingData(CrowlingoException):
-
-    def __init__(self, headers=None):
-        super().__init__(400, "There is no training data associated to these model. Add some documents before running "
-                              "the train process or increase the `train_ratio` field in model_config.", headers)
 
 
 class ErrorsEnum(Enum):

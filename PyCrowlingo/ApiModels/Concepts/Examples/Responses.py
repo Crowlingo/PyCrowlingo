@@ -77,7 +77,6 @@ class CreateLabels(BaseModel):
         }
 
 
-
 class DeleteConcept(BaseModel):
     class Config:
         schema_extra = {

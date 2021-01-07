@@ -13,10 +13,10 @@ class Get(BaseModel):
 class Create(BaseModel):
     class Config:
         _model_id = "AskUbuntu"
-        _model_type = "clf"
+        _category = "classifier"
         schema_extra = {
-            "_python": [f"model_id = \"{_model_id}\"", f"model_type = \"{_model_type}\""
-                        "client.model.create(model_id, model_type)"]
+            "_python": [f"model_id = \"{_model_id}\"", f"category = \"{_category}\""
+                        "client.model.create(model_id, category)"]
         }
 
 
@@ -73,4 +73,29 @@ class RemoveCollaborator(BaseModel):
             "_python": [f"model_id = \"{_model_id}\"",
                         f"email = \"john@crowlingo.com\"",
                         "client.model.remove_collaborator(model_id, email)"]
+        }
+
+
+class Edit(BaseModel):
+    class Config:
+        _model_id = "AskUbuntu"
+        _description = "Best model ever"
+        schema_extra = {
+            "_python": [f"model_id = \"{_model_id}\"",
+                        f"description = \"{_description}\"",
+                        "client.model.edit(model_id, description=description)"]
+        }
+
+
+class ListPublic(BaseModel):
+    class Config:
+        schema_extra = {
+            "_python": ["client.model.list_public()"]
+        }
+
+
+class ListUser(BaseModel):
+    class Config:
+        schema_extra = {
+            "_python": ["client.model.list_user()"]
         }

@@ -1,9 +1,9 @@
 import typing
 from typing import Any, Optional, Text, Dict
 
-from rasa.nlu.constants import ENTITIES
 from rasa.nlu.extractors.extractor import EntityExtractor
-from rasa.nlu.training_data import Message
+from rasa.shared.nlu.constants import ENTITIES, TEXT
+from rasa.shared.nlu.training_data.message import Message
 
 from .Utils import get_client
 
@@ -41,7 +41,7 @@ class EntitiesExtractor(EntityExtractor):
         on any context attributes created by a call to
         :meth:`components.Component.process`
         of components previous to this one."""
-        res = self.client.entities.extract(message.text)
+        res = self.client.entities.extract(message.get(TEXT))
         entities = [
             {
                 "entity": ent.ent_type,

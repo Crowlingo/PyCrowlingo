@@ -1,5 +1,5 @@
-import csv
-
+import csv, sys
+csv.field_size_limit(sys.maxsize)
 
 def upload_csv(client, function, function_field, filename, fieldnames=None, batch_size=200, delimiter=',', **kwargs):
     def check_batch(force=False):

@@ -7,7 +7,7 @@ class Search(BaseModel):
             "example": {
                 "question": {
                     "variations": {'en': "I'm no longer in charge of class, so I want to unregister.",
-                                   "ja": "授業担当者ではなくなったので登録解除したい。"},
+                                     "ja": "授業担当者ではなくなったので登録解除したい。"},
                     "question_id": "GPcbbjvo",
                     "answer_id": "HGBkrUrM"},
                 "answer": {"variations": {
@@ -86,7 +86,7 @@ class GetQuestion(BaseModel):
         schema_extra = {
             "example": {
                 "variations": {'en': "I'm no longer in charge of class, so I want to unregister.",
-                               "ja": "授業担当者ではなくなったので登録解除したい。"},
+                                 "ja": "授業担当者ではなくなったので登録解除したい。"},
                 "question_id": "HGBkrUrM"
             }
         }
@@ -118,7 +118,7 @@ class ListQuestions(BaseModel):
         schema_extra = {
             "example": {
                 "questions": [{"variations": {'en': "I'm no longer in charge of class, so I want to unregister.",
-                                              "ja": "授業担当者ではなくなったので登録解除したい。"},
+                                                "ja": "授業担当者ではなくなったので登録解除したい。"},
                                "answer_id": "HGBkrUrM"}
                               ]
             }
@@ -144,4 +144,3 @@ class ListAnswers(BaseModel):
                 }]
             }
         }
-

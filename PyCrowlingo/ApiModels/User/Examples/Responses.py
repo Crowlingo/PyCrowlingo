@@ -44,16 +44,3 @@ class Info(BaseModel):
                 "plan": "free"
             }
         }
-
-
-class ModelsInfo(BaseModel):
-    class Config:
-        schema_extra = {
-            "example": {
-                "models": [{"name": "japanese_faq",
-                            "category": "faq",
-                            "deployed": True,
-                            "trained": True,
-                            "owner": "john@crowlingo.com"}]
-            }
-        }

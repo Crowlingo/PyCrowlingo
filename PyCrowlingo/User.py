@@ -22,6 +22,3 @@ class User(Connector):
         res = Models.RefreshToken.fill().call(self.client, username, password)
         self.client.set_token(res.access_token)
         return res
-
-    def models_info(self):
-        return Models.ModelsInfo.fill(**locals()).call(self.client)
