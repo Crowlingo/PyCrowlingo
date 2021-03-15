@@ -68,6 +68,8 @@ class ListDocuments(BaseModel):
         }
 
 
+# TODO insert real response
+
 class RenameClass(BaseModel):
     class Config:
         schema_extra = {

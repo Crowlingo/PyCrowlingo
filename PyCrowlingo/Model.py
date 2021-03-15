@@ -31,7 +31,7 @@ class Model(Connector):
     def remove_collaborator(self, model_id, email):
         return Models.RemoveCollaborator.fill(**locals()).call(self.client)
 
-    def edit(self, model_id, description=None, markers=None, public=None):
+    def edit(self, model_id, description=None, markers=None, public=None, readme=None):
         return Models.Edit.fill(**locals()).call(self.client)
 
     def list_public(self, page=None, page_size=None, markers=None):

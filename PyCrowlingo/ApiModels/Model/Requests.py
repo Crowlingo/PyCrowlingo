@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field, PositiveInt
 
 from . import Responses
 from .Examples import Requests as Examples
-from ..Attributes import ModelId, ModelType, ModelConfig, Permissions, Email, Category, Name, Description, Markers, \
-    Public, Pagination
+from ..Attributes import ModelId, ModelConfig, Permissions, Email, Category, Name, Description, Markers, \
+    Public, Pagination, ModelType, TrainRatio, MaxTrainingTime, HyperParameters, NbTrainings, Readme
 from ..Basic import BasicModel
 
 
@@ -25,16 +25,10 @@ class Get(Examples.Get, Base):
         pass
 
 
-class Train(Examples.Train, Base):
+class Train(Examples.Train, Base, ModelType, TrainRatio, MaxTrainingTime, HyperParameters, NbTrainings):
     _endpoint = "{model_id}/train"
     _price = 1
     _responses = [403, 404]
-
-    model_type: Optional[Union[ModelType, str]] = None
-    train_ratio: Optional[float] = Field(None, gt=0, le=1)
-    max_training_time: Optional[PositiveInt] = None
-    hyper_parameters: Optional[Dict[str, Any]] = None
-    nb_trainings: Optional[int] = Field(None, ge=1, le=20)
 
     class Query(ModelId):
         pass
@@ -91,7 +85,7 @@ class RemoveCollaborator(Examples.RemoveCollaborator, Base):
         pass
 
 
-class Edit(Examples.Edit, Base, Description, Markers, Public):
+class Edit(Examples.Edit, Base, Description, Markers, Public, Readme):
     _endpoint = "{model_id}"
     _method = "PATCH"
     _responses = [403, 404]

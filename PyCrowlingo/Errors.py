@@ -127,7 +127,15 @@ class DuplicateModelId(CrowlingoException):
 
     def __init__(self, headers=None):
         super().__init__(409, "You already have a model with this id, please delete the model first if you want "
-                              "to overwrite it or use the endpoint 'update' to create a new version of this model.",
+                              "to overwrite it",
+                         headers)
+
+
+class DuplicateDocumentId(CrowlingoException):
+
+    def __init__(self, headers=None):
+        super().__init__(409, "You already have a document with this id, please delete the document first if you want "
+                              "to overwrite it or use the parameter 'upsert' to overwrite it.",
                          headers)
 
 
@@ -215,7 +223,7 @@ class ErrorsEnum(Enum):
     MODEL_NOT_TRAINED = ModelNotTrained
     BAD_CREDENTIALS = BadCredentials
     TEST_MODEL_FORBIDDEN = TestModelForbidden
-    BAD_MODELS_PERMS = BadModelPerms
+    BAD_MODEL_PERMS = BadModelPerms
     BAD_MODEL_CATEGORY = BadModelCategory
     MODEL_NOT_DEPLOYED = ModelNotDeployed
     TOKEN_NOT_FOUND = TokenNotFound
@@ -226,6 +234,7 @@ class ErrorsEnum(Enum):
     PERIOD_LIMIT_REACHED = PeriodLimitReached
     MODELS_LIMIT_REACHED = ModelsLimitReached
     DUPLICATE_MODEL_ID = DuplicateModelId
+    DUPLICATE_DOCUMENT_ID = DuplicateDocumentId
     BAD_PARAMETERS_QUERY = BadParametersQuery
     CONTENT_LENGTH_REQUIRED = ContentLengthRequired
     REQUEST_ENTITY_TOO_LARGE = RequestEntityTooLarge

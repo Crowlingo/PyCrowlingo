@@ -7,16 +7,16 @@ class Classifier(Connector):
     def classify(self, model_id, text, lang=None, prod_version=None, optional_features=None):
         return Models.Classify.fill(**locals()).call(self.client)
 
-    def create_documents(self, model_id, documents):
+    def create_documents(self, model_id, documents, upsert=None):
         return Models.CreateDocuments.fill(**locals()).call(self.client)
 
-    def update_document(self, model_id, document_id, class_id=None, text=None, lang=None):
+    def update_document(self, model_id, document_id, class_id=None, text=None, lang=None, markers=None):
         return Models.UpdateDocument.fill(**locals()).call(self.client)
 
     def get_document(self, model_id, document_id):
         return Models.GetDocument.fill(**locals()).call(self.client)
 
-    def list_documents(self, model_id, page=None, page_size=None, id=None, lang=None, class_id=None):
+    def list_documents(self, model_id, page=None, page_size=None, id=None, lang=None, class_id=None, marker=None):
         return Models.ListDocuments.fill(**locals()).call(self.client)
 
     def delete_document(self, model_id, document_id):

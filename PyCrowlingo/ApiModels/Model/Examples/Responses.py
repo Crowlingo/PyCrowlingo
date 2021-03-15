@@ -69,6 +69,8 @@ class RemoveCollaborator(BaseModel):
         }
 
 
+# TODO insert real response
+
 class Edit(BaseModel):
     class Config:
         schema_extra = {

@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional, Union, Dict, Any
 
-from pydantic import BaseModel, AnyUrl, EmailStr, Field, constr, validator
+from pydantic import BaseModel, AnyUrl, EmailStr, Field, constr, validator, PositiveInt
 from pydantic.schema import datetime
 
 ID_TYPE = constr(regex=r"^[a-zA-Z0-9_\-: ]*$")
@@ -105,8 +105,8 @@ class Document(Lang):
     text: str
 
 
-class Langs(BaseModel):
-    langs: List[ID_TYPE]
+class Languages(BaseModel):
+    languages: Optional[List[ID_TYPE]]
 
 
 class Url(BaseModel):
@@ -387,6 +387,10 @@ class Description(BaseModel):
     description: Optional[str]
 
 
+class Marker(BaseModel):
+    marker: Optional[ID_TYPE]
+
+
 class Markers(BaseModel):
     markers: Optional[List[ID_TYPE]]
 
@@ -400,21 +404,6 @@ class Public(BaseModel):
     public: Optional[bool]
 
 
-class ModelInfo(Name, Description, Markers, Public):
-    versions: Dict[str, Version]
-    category: str
-    training_status: str
-    training_progress: int
-    training_error: Optional[str]
-    training_start: Optional[str]
-    training_end: Optional[str]
-    deploying_start: Optional[str]
-    deploying_end: Optional[str]
-    owner: str
-    collaborators: Dict[str, int]
-    metadata: Optional[Dict[str, Any]]
-    deployed: bool
-
 class Error(BaseModel):
     error_id: str
     msg: str
@@ -424,6 +413,7 @@ class Category(str, Enum):
     CLASSIFIER: str = "classifier"
     FAQ: str = "faq"
     CONCEPTS: str = "concepts"
+    SEARCH_ENGINE: str = "search_engine"
 
     @classmethod
     def _missing_(cls, value):
@@ -434,7 +424,7 @@ class Category(str, Enum):
         return super()._missing_(value)
 
 
-class ModelType(str, Enum):
+class ModelTypeEnum(str, Enum):
     SVM: str = "svm"
     DEEP: str = "deep"
 
@@ -488,24 +478,28 @@ class Pagination(BaseModel):
     page_size: int = Field(10, ge=1)
 
 
-class DocumentModel(Id, Document, ClassId, OptionalFeatures):
+class DocumentModel(Id, Document, ClassId, OptionalFeatures, Markers):
     pass
 
 
-class LabelModel(Document, Id, ConceptId):
+class LabelModel(Document, Id, ConceptId, Markers):
     pass
 
 
-class ConceptModel(Document, Id, Properties):
+class ConceptModel(Id, Properties, Markers):
     pass
 
 
-class QuestionModel(Id, Variations, AnswerId):
+class QuestionModel(Id, Variations, AnswerId, Markers):
     pass
 
 
-class AnswerModel(Id, Variations):
+class AnswerModel(Id, Variations, Markers):
     pass
+
+
+class Completeness(BaseModel):
+    completeness: float = Field(0.2, gt=0, le=1)
 
 
 class ClfConfigSVM(BaseModel):
@@ -572,3 +566,62 @@ class Permissions(BaseModel):
         if v:
             return v
         return CollaboratorPermissions()
+
+
+class ModelType(BaseModel):
+    model_type: Optional[Union[ModelTypeEnum, str]] = None
+
+
+class TrainRatio(BaseModel):
+    train_ratio: Optional[float] = Field(None, gt=0, le=1, example=0.8)
+
+
+class MaxTrainingTime(BaseModel):
+    max_training_time: Optional[PositiveInt] = Field(None, example=3600)
+
+
+class HyperParameters(BaseModel):
+    hyper_parameters: Optional[Dict[str, Any]] = None
+
+
+class NbTrainings(BaseModel):
+    nb_trainings: Optional[int] = Field(None, ge=1, le=20, example=10)
+
+
+class Readme(BaseModel):
+    readme: Optional[str] = None
+
+
+class Metadata(BaseModel):
+    metadata: Optional[Dict[str, Any]]
+
+
+class ModelInfo(ModelId, Name, Description, Markers, Public, Readme, Metadata):
+    versions: Dict[str, Version]
+    category: str
+    training_status: str
+    training_progress: int
+    training_error: Optional[str]
+    training_start: Optional[str]
+    training_end: Optional[str]
+    deploying_start: Optional[str]
+    deploying_end: Optional[str]
+    owner: str
+    collaborators: Dict[str, int]
+    deployed: bool
+
+
+class SearchResult(Text, Weight):
+    pass
+
+
+class LangSearchResult(BaseModel):
+    keywords: Dict[str, List[SearchResult]]
+
+
+class SearchEngineKeyword(Text, Lang):
+    pass
+
+
+class Upsert(BaseModel):
+    upsert: bool = False

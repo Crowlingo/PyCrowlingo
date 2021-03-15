@@ -2,7 +2,6 @@ import time
 from json import JSONDecodeError
 
 import requests
-from .Errors import CrowlingoException, InternalError
 from lazy import lazy
 from requests import HTTPError
 
@@ -10,6 +9,7 @@ from . import Errors
 from .Classifier import Classifier
 from .Concepts import Concepts
 from .Entities import Entities
+from .Errors import CrowlingoException, InternalError
 from .Faq import Faq
 from .Html import Html
 from .Languages import Languages

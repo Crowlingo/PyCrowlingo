@@ -3,7 +3,7 @@ from typing import List, Optional
 from . import Responses
 from .Examples import Requests as Examples
 from ..Attributes import ModelId, Document, DocumentId, ProdVersion, CustomDocument, Text, Lang, \
-    ID_TYPE, ClassId, Pagination, Id, OptionalFeatures, OldClassId, NewClassId
+    ID_TYPE, ClassId, Pagination, Id, OptionalFeatures, OldClassId, NewClassId, Markers, Marker, Upsert
 from ..Basic import BasicModel
 
 
@@ -22,7 +22,7 @@ class Classify(Examples.Classify, Base, Document, OptionalFeatures):
         pass
 
 
-class CreateDocuments(Examples.CreateDocuments, Base):
+class CreateDocuments(Examples.CreateDocuments, Base, Upsert):
     _endpoint = "{model_id}/documents/"
     _responses = [403, 404, 409, 411, 413]
     documents: List[CustomDocument]
@@ -40,7 +40,7 @@ class DeleteDocument(Examples.DeleteDocument, Base):
         pass
 
 
-class UpdateDocument(Examples.UpdateDocument, Base, Lang, Text):
+class UpdateDocument(Examples.UpdateDocument, Base, Lang, Text, Markers):
     _endpoint = "{model_id}/documents/{document_id}"
     _method = "PATCH"
     _responses = [403, 404, 411, 413]
@@ -65,7 +65,7 @@ class ListDocuments(Examples.ListDocuments, Base):
     _method = "GET"
     _responses = [403, 404]
 
-    class Query(ModelId, Id, Lang, ClassId, Pagination):
+    class Query(ModelId, Id, Lang, ClassId, Pagination, Marker):
         pass
 
 
