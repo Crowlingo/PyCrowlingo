@@ -132,23 +132,23 @@ Here is the list of available exceptions:
 |Class | Error ID | Status code | Description|
 |---|---|---|---|
 TrainingError | TRAINING_ERROR | 400 | An error happened during the training
-TokenNotFound |TOKEN_NOT_FOUND | 401 | Token not found. Insert your token in the query parameter with api_key=[YOUR_TOKEN] or in the headers with x-api-key:[YOUR TOKEN].
+TokenNotFound | TOKEN_NOT_FOUND | 401 | Token not found. Insert your token in the query parameter with api_key=[YOUR_TOKEN] or in the headers with x-api-key:[YOUR TOKEN].
 BadCredentials |BAD_CREDENTIALS | 401 | Could not validate credentials. Their might be an error in your token or email/password. Maybe your account has been disabled. Please contact us if you do not understand the reason.
 TestModelForbidden | TEST_MODEL_FORBIDDEN | 403 | You do not have access to the test version of this model. Ask the access to the owner of the model or use the prod version of this model.
 BadModelsPerms | BAD_MODELS_PERMS | 403 | You do not have the permissions to perform this action on this model. Ask for the owner of this model to provides you more rights.
 BadModelCategory | BAD_MODEL_CATEGORY | 404 | This model cannot be use for this kind of request. Create a new model or use another endpoint.
 ModelNotDeployed |MODEL_NOT_DEPLOYED | 404 | This model is not deployed. Use the test model or deploy it first.
-CollaboratorNotFound | COLLABORATOR_NOT_FOUND | 404 | This collaborator was not found. Maybe it has already delete the model or you did not add it as collaborator on this model.
+CollaboratorNotFound | COLLABORATOR_NOT_FOUND | 404 | This collaborator was not found. Maybe it has already delete the model or you did not add it as collaborator on this model.
 ModelNotFound | MODEL_NOT_FOUND | 404 | We cannot find a model with this id. You have to create a model before using it.
-DocumentNotFound | DOCUMENT_NOT_FOUND | 404 | We cannot find a document with this id. You have to create a document before using it.
+DocumentNotFound | DOCUMENT_NOT_FOUND | 404 | We cannot find a document with this id. You have to create a document before using it.
 DuplicateModelId | DUPLICATE_MODEL_ID | 409 |You already have a model with this id, please delete the model first if you want to overwrite it or use the endpoint update to create a new version of this model.
 ContentLengthRequired | CONTENT_LENGTH_REQUIRED | 411 |You need to provide a content length header for POST and PATCH requests.
 RequestEntityTooLarge | REQUEST_ENTITY_TOO_LARGE | 413 |The payload of your body is too large. Try to split your request with smaller payload.
-BadParametersQuery | BAD_PARAMETERS_QUERY | 422 |The parameters of the query do not correspond to the documentation description. The query cannot be processed.
+BadParametersQuery | BAD_PARAMETERS_QUERY | 422 |The parameters of the query do not correspond to the documentation description. The query cannot be processed.
 ModelNotTrained | MODEL_NOT_TRAINED | 423 | This model is not trained yet. You have to wait until it is trained or run the training before performing this action.
-MinuteLimitReached | MINUTE_LIMIT_REACHED | 429 | Minute limit reached, wait the number of seconds indicated by the header: x-minute-reset or change subscription plan.
-PeriodLimitReached | PERIOD_LIMIT_REACHED | 429 | Period limit reached, wait the number of seconds indicated by the header: x-period-reset or change subscription plan.
-ModelsLimitReached | MODELS_LIMIT_REACHED |429 |You have reached the maximal number of custom models. If you want to create a new one, you have to delete one of your custom models first or change your subscription plan.
+MinuteLimitReached | MINUTE_LIMIT_REACHED | 429 | Minute limit reached, wait the number of seconds indicated by the header: x-minute-reset or change subscription plan.
+PeriodLimitReached | PERIOD_LIMIT_REACHED | 429 | Period limit reached, wait the number of seconds indicated by the header: x-period-reset or change subscription plan.
+ModelsLimitReached | MODELS_LIMIT_REACHED |429 |You have reached the maximal number of custom models. If you want to create a new one, you have to delete one of your custom models first or change your subscription plan.
 InternalError | INTERNAL_ERROR | 500 | Internal Error, we have been notified and will fix the problem as soon as possible. Try again later and do not hesitate to contact us if you need help.
 
 ## Upload Data
@@ -160,15 +160,21 @@ It will split the dataset in several parts to avoid exceed the payload size limi
 If you have a more specific dataset format, you can do it by using the functions listed on [the API documentation](https://crowlingo.com/docs).
 
 
-## Wait for training
-The function `client.model.train` is asynchronous, that means it will send you a response before the end of the process. Then if you want to perform an action which need a trained model like for example `client.model.deploy`, you have to wait until the end of the process. The training status can be watched with the function `client.model.get`: `training_status` will contain the status of the training, `training_error` will tell you if an error occurred.
+## Wait for asynchronous actions
+Some functions of Crowlingo might be long, so they are asynchronous. that means it will send you a response before the end of the process. For each one, you have a function to watch the progression and wait until the end of the task.
+Here are the functions to wait for each task:
+|Async Function | Wait Function |
+|---|---|
+|`client.model.train`| `client.model.wait_training`
+`client.model.deploy`| `client.model.wait_deploying`
+`client.search_engine.create_documents`| `client.search_engine.create_documents`
 
-All of this process can be easily managed with the function `client.model.wait_training`:
-
+For example, use these lines to train, and wait until the model is deployed:
 ```python
 client.model.train(model_id)
 client.model.wait_training(model_id)
 client.model.deploy(model_id)
+client.model.wait_deploying(model_id)
 ```
  
 
@@ -191,7 +197,7 @@ Follow the [Rasa quick start guide](https://rasa.com/docs/rasa/user-guide/buildi
 
 Open the file config.yml and modify the pipeline to integrate Crowlingo NLU components.
 
-Here is an example of a chatbot created with Rasa quick start guide::
+Here is an example of a chatbot created with Rasa quick start guide:
 
 ```yaml
 language: en

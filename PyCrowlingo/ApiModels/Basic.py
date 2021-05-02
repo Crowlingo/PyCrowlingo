@@ -99,7 +99,7 @@ class BasicModel(BaseModel):
         endpoint = endpoint.format_map(path)
         auth = (username, password) if username and password else None
         response = client.call(endpoint=endpoint, params=query, json=body, method=self._method, auth=auth)
-        return self.get_response_model()(**response)
+        return self.get_response_model().construct(**response)
 
     @classmethod
     def fill(cls, **params):

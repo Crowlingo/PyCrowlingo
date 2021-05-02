@@ -99,3 +99,9 @@ class ListUser(BaseModel):
         schema_extra = {
             "_python": ["client.model.list_user()"]
         }
+
+class StopTraining(BaseModel):
+    class Config:
+        schema_extra = {
+            "_python": ["client.model.stop_training()"]
+        }

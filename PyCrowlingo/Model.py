@@ -40,6 +40,9 @@ class Model(Connector):
     def list_user(self, page=None, page_size=None, markers=None):
         return Models.ListUser.fill(**locals()).call(self.client)
 
+    def stop_training(self, model_id, force=None):
+        return Models.StopTraining.fill(**locals()).call(self.client)
+
     def wait_training(self, model_id, time_sleep=3):
         import time
         from dateutil.parser import parse
@@ -53,6 +56,10 @@ class Model(Connector):
                 res = self.client.model.get(model_id)
                 status = res.training_status
                 pbar.n = res.training_progress
+                pbar.set_postfix({"Best training validation": max([0] + [x["f1"]
+                                                                         for x in
+                                                                         res.versions.get("test", {}).get(
+                                                                             "training_validation", {})])})
                 pbar.refresh()
                 done = status == 'done'
                 if status == "error":
@@ -60,7 +67,7 @@ class Model(Connector):
         start = parse(res.training_start)
         end = parse(res.training_end)
         print(f"Trained {model_id} in {end - start}")
-        return res.versions["test"].metrics
+        return getattr(res.versions["test"], "metrics", None)
 
     def wait_deploying(self, model_id, time_sleep=3):
         import time

@@ -2,6 +2,7 @@ import time
 from json import JSONDecodeError
 
 import requests
+from .Errors import CrowlingoException, InternalError
 from lazy import lazy
 from requests import HTTPError
 
@@ -9,12 +10,12 @@ from . import Errors
 from .Classifier import Classifier
 from .Concepts import Concepts
 from .Entities import Entities
-from .Errors import CrowlingoException, InternalError
 from .Faq import Faq
 from .Html import Html
 from .Languages import Languages
 from .Model import Model
 from .Phrases import Phrases
+from .SearchEngine import SearchEngine
 from .Summary import Summary
 from .Syntax import Syntax
 from .Texts import Texts
@@ -123,6 +124,10 @@ class Client:
     @lazy
     def phrases(self):
         return Phrases(self)
+
+    @lazy
+    def search_engine(self):
+        return SearchEngine(self)
 
     @lazy
     def summary(self):

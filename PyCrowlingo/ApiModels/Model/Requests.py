@@ -1,10 +1,8 @@
-from typing import Union, Optional, Dict, Any
-
-from pydantic import BaseModel, Field, PositiveInt
+from pydantic import BaseModel
 
 from . import Responses
 from .Examples import Requests as Examples
-from ..Attributes import ModelId, ModelConfig, Permissions, Email, Category, Name, Description, Markers, \
+from ..Attributes import ModelId, Permissions, Email, Category, Name, Description, Markers, \
     Public, Pagination, ModelType, TrainRatio, MaxTrainingTime, HyperParameters, NbTrainings, Readme
 from ..Basic import BasicModel
 
@@ -14,6 +12,14 @@ class Base(BasicModel):
     _response_module = Responses
     _price = 0
 
+
+class StopTraining(Examples.StopTraining, Base):
+    _endpoint = "{model_id}/stop_training"
+    _method = "POST"
+    _responses = []
+
+    class Query(ModelId):
+        pass
 
 class Get(Examples.Get, Base):
     _endpoint = "{model_id}"
@@ -48,7 +54,7 @@ class Delete(Examples.Delete, Base):
     _responses = [403, 404]
 
     class Query(ModelId):
-        pass
+        force: bool = False
 
 
 class Deploy(Examples.Deploy, Base):
@@ -110,3 +116,5 @@ class ListUser(Examples.ListUser, Base, Pagination, Markers):
 
     class Query(BaseModel):
         pass
+
+

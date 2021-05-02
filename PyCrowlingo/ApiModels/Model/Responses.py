@@ -47,3 +47,7 @@ class ListPublic(Examples.ListPublic):
 
 class ListUser(Examples.ListUser):
     models: List[ModelInfo]
+
+
+class StopTraining(Examples.StopTraining, ModelInfo):
+    pass

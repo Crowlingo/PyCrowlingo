@@ -106,7 +106,8 @@ class Document(Lang):
 
 
 class Languages(BaseModel):
-    languages: Optional[List[ID_TYPE]]
+    languages: Optional[List[ID_TYPE]] = Field(None, description="List of languages that should be included in the "
+                                                                 "results")
 
 
 class Url(BaseModel):
@@ -395,8 +396,18 @@ class Markers(BaseModel):
     markers: Optional[List[ID_TYPE]]
 
 
-class Version(BaseModel):
+class HyperParameters(BaseModel):
+    hyper_parameters: Optional[Dict[str, Any]]
+
+
+class TrainingValidation(HyperParameters):
+    time: str
+    f1: float
+
+
+class Version(HyperParameters):
     metrics: Optional[Dict[str, Any]]
+    training_validation: Optional[List[TrainingValidation]]
     version_id: int
 
 
@@ -607,7 +618,7 @@ class ModelInfo(ModelId, Name, Description, Markers, Public, Readme, Metadata):
     deploying_start: Optional[str]
     deploying_end: Optional[str]
     owner: str
-    collaborators: Dict[str, int]
+    collaborators: Dict[str, CollaboratorPermissions]
     deployed: bool
 
 
