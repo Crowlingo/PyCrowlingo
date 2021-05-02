@@ -28,14 +28,14 @@ First of all, you will need to instantiate a client of Crowlingo. You can do it 
 
 ```python
 from PyCrowlingo import Client
-client = Client('[TOKEN]')
+client = Client('<TOKEN>')
 ```
 
 Or using your account credentials:
 
  ```python
 from PyCrowlingo import Client
-client = Client(username='[EMAIL]', password='[PASSWORD]')
+client = Client(username='<EMAIL>', password='<PASSWORD>')
 ```
 
 ### QuickStart
@@ -167,7 +167,7 @@ Here are the functions to wait for each task:
 |---|---|
 |`client.model.train`| `client.model.wait_training`
 `client.model.deploy`| `client.model.wait_deploying`
-`client.search_engine.create_documents`| `client.search_engine.create_documents`
+`client.search_engine.create_documents`| `client.search_engine.wait_indexing`
 
 For example, use these lines to train, and wait until the model is deployed:
 ```python
@@ -203,9 +203,9 @@ Here is an example of a chatbot created with Rasa quick start guide:
 language: en
 pipeline:
   - name: PyCrowlingo.Rasa.EntitiesExtractor
-    token: "[TOKEN]"
+    token: "<TOKEN>"
   - name: PyCrowlingo.Rasa.IntentClassifier
-    token: "[TOKEN]"
+    token: "<TOKEN>"
     model_id: "intent_rasa"
 ```
 
