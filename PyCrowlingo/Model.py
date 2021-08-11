@@ -56,10 +56,10 @@ class Model(Connector):
                 res = self.client.model.get(model_id)
                 status = res.training_status
                 pbar.n = res.training_progress
-                pbar.set_postfix({"Best training validation": max([0] + [x["f1"]
-                                                                         for x in
-                                                                         res.versions.get("test", {}).get(
-                                                                             "training_validation", {})])})
+                if res.category == "classifier":
+                    pbar.set_postfix({"Best training validation": max([0] + [x.f1
+                                                                             for x in
+                                                                             res.versions.get("test", {}).training_validation])})
                 pbar.refresh()
                 done = status == 'done'
                 if status == "error":
